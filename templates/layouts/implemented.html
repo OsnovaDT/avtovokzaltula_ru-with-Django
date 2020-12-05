@@ -1,0 +1,16 @@
+{% extends 'layouts/basic.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4 offset-4">
+        <div class="text-center jumbotron">
+            {% block text %}
+            {% endblock text %}
+
+            <a href="{% url 'bus_stations:index' %}">
+                <input class='btn btn-success' type="submit" value="Главная">
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock content %}
