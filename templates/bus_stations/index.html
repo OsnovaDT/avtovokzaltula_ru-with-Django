@@ -1,0 +1,34 @@
+{% extends 'layouts/basic.html' %}
+
+{% block title %}Список автомобилей{% endblock title %}
+
+{% block content %}
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-md-6 offset-3">
+            <h2 class='text-center'>Выберите автовокзал отправитель</h2>
+            <table style="width:100%">
+                <tr class='text-center'>
+                    <th>Название автовокзала</th>
+                    <th>Часы работы</th>
+                    <th>Адрес</th>
+                    <th>Телефон</th>
+                </tr>
+                {% for bus_station in bus_stations %}
+                <tr>
+                    <td>{{ bus_station }}</td>
+                    <td class='text-center'>
+                        {{ bus_station.office_hours }}
+                    </td>
+                    <td>{{ bus_station.address }}</td>
+                    <td class='text-center'>
+                        {{ bus_station.phone_number }}
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}
