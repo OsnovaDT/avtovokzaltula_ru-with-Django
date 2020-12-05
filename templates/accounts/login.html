@@ -3,12 +3,19 @@
 {% block title %}Вход на сайт{% endblock title %}
 
 {% block buttons %}
-<input type="hidden" name="next" value='{{ next }}'>
-<input class='btn btn-success' type="submit" value="Войти">
+<input class='btn btn-primary' type="submit" value="Войти">
 {% endblock buttons %}
 
 {% block after_form %}
-<a class='text-dark' href="{% url 'accounts:password_reset' %}">
-    Забыли пароль?
-</a>
+<p>
+    <a class='text-dark' href="{% url 'accounts:password_reset' %}">
+        Забыли пароль?
+    </a>
+</p>
+
+<p>
+    <a class='text-dark' href="{% url 'accounts:registration' %}">
+        <input class='btn btn-success' type="submit" value="Регистрация">
+    </a>
+</p>
 {% endblock after_form %}
