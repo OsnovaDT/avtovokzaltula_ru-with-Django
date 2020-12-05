@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'bus_stations',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -90,3 +91,11 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+
+# Login and logout
+
+LOGIN_REDIRECT_URL = 'bus_stations:index'
+
+LOGOUT_REDIRECT_URL = 'accounts:login'
+
+LOGIN_URL = 'accounts:login'
