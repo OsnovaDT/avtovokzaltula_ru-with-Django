@@ -6,3 +6,9 @@
 <input type="hidden" name="next" value='{{ next }}'>
 <input class='btn btn-success' type="submit" value="Войти">
 {% endblock buttons %}
+
+{% block after_form %}
+<a class='text-dark' href="{% url 'accounts:password_reset' %}">
+    Забыли пароль?
+</a>
+{% endblock after_form %}
