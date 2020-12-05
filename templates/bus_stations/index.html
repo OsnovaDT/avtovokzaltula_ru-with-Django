@@ -16,7 +16,11 @@
                 </tr>
                 {% for bus_station in bus_stations %}
                 <tr>
-                    <td>{{ bus_station }}</td>
+                    <td>
+                        <a class='text-dark' href="{% url 'bus_stations:routes' bus_station.pk %}">
+                            {{ bus_station }}
+                        </a>
+                    </td>
                     <td class='text-center'>
                         {{ bus_station.office_hours }}
                     </td>

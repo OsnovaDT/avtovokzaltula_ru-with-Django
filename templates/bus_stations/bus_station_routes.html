@@ -1,0 +1,41 @@
+{% extends 'layouts/basic.html' %}
+
+{% block title %}
+Список маршрутов автовокзала {{ bus_station }}
+{% endblock title %}
+
+{% block content %}
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-md-6 offset-3 text-center">
+            <h4>
+                <b>
+                    Расписание отправлений с автовокзала {{ bus_station }}
+                </b>
+            </h4>
+            <h6>
+                <b>Адрес</b>: {{ bus_station.address }}
+            </h6>
+            <h6>
+                <b>Телефон</b>: {{ bus_station.phone_number }}
+            </h6>
+            <table width="100%">
+                <tr>
+                    <th>Название маршрута</th>
+                    <th>Регулярность</th>
+                    <th>Время отправления</th>
+                </tr>
+                {% for route in routes %}
+                <tr>
+                    <td width='200'>{{ route }}</td>
+                    <td width='150'>
+                        {{ route.regularity }}
+                    </td>
+                    <td>{{ route.departure_time }}</td>
+                    </trs=>
+                    {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

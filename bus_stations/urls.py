@@ -1,9 +1,17 @@
 from django.urls import path
 
-from .views import Index
+from .views import Index, RoutesListView
 
 app_name = 'bus_stations'
 
 urlpatterns = [
-    path('', Index.as_view(), name='index')
+    # Index
+    path('', Index.as_view(), name='index'),
+
+    # Bus station's routes
+    path(
+        '<bus_station_id>/routes/',
+        RoutesListView.as_view(),
+        name='routes'
+    )
 ]
