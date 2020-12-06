@@ -34,12 +34,12 @@ class FlightListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Flight.objects.filter(
             route=self.kwargs['route_id']
-        )
+        ).select_related('route', 'bus_station', 'bus')
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['route'] = Route.objects.get(
-            pk=self.kwargs['route_id']
-        )
+        context['route'] = Route.objects.select_related(
+            'bus_station'
+        ).get(pk=self.kwargs['route_id'])
 
         return context
