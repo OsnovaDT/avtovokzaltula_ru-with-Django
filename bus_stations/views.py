@@ -1,3 +1,5 @@
+from time import gmtime
+
 from .models import BusStation, Route, Flight, Bus, Driver
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -42,4 +44,52 @@ class FlightListView(LoginRequiredMixin, ListView):
             'bus_station'
         ).get(pk=self.kwargs['route_id'])
 
+        context['next_flight'] = get_next_flight(Flight.objects.all())
+
         return context
+
+
+def get_next_flight(flights):
+    current_hour = gmtime()[3] + 3
+    current_minute = gmtime()[4]
+
+    # Flights with departure hour more than current hour
+    flights_after_current_hour = []
+    for flight in flights:
+        # If flight's departure hour more or equal than current hour
+        if int(str(flight.departure_time)[:2]) >= current_hour:
+            flights_after_current_hour.append(flight)
+    if not flights_after_current_hour:
+        return ''
+    else:
+        # Flights with departure time more than current time
+        flights_after_current_time = []
+        for flight in flights_after_current_hour:
+            # If flight's departure minute more or equal than current minute
+            if int(str(flight.departure_time)[3:5]) >= current_minute and \
+                    int(str(flight.departure_time)[:2]) == current_hour:
+                flights_after_current_time.append(flight)
+
+            if int(str(flight.departure_time)[:2]) > current_hour:
+                flights_after_current_time.append(flight)
+
+        return get_flight_with_non_zero_free_places_amount(flights_after_current_time)
+
+
+def get_flight_with_non_zero_free_places_amount(flights):
+    for i in range(len(flights)):
+        next_flight = flights[i]
+
+        if next_flight.amount_of_free_places != 0:
+            break
+        else:
+            while next_flight.amount_of_free_places == 0:
+                i += 1
+                if i >= len(flights):
+                    next_flight = ''
+                    break
+                next_flight = flights[i]
+                if next_flight.amount_of_free_places != 0:
+                    break
+
+    return next_flight

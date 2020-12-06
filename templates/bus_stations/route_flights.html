@@ -52,6 +52,40 @@
                 </tr>
                 {% endfor %}
             </table>
+
+            <!-- Next flight -->
+            <br>
+            {% if not next_flight.departure_time %}
+            <h4>Ближайших рейсов нет</h4>
+            {% else %}
+            <h4 class='text-center'>Ближайший рейс</h4>
+            <table width="100%">
+
+                <!-- Departure time -->
+                <td width='180'>
+                    {{ next_flight.departure_time }}
+                </td>
+
+                <!-- Arrival time -->
+                <td width='180'>
+                    {{ next_flight.arrival_time }}
+                </td>
+
+                <!-- Route -->
+                <td width='150'>
+                    <a class='text-dark'
+                        href="{% url 'bus_stations:routes' next_flight.bus_station.pk %}">{{ next_flight.bus_station }}</a>
+                    -
+                    {{ route }}
+                </td>
+
+                <!-- Free places amount -->
+                <td width='220'>{{ next_flight.amount_of_free_places }}</td>
+
+                <!-- Bus -->
+                <td width='110'>{{ next_flight.bus }}</td>
+            </table>
+            {% endif %}
         </div>
     </div>
 </div>
