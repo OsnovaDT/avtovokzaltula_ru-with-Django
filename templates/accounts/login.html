@@ -1,5 +1,5 @@
 {% extends 'layouts/default_form.html' %}
-
+{% load static %}
 {% block title %}Вход на сайт{% endblock title %}
 
 {% block buttons %}
@@ -16,6 +16,12 @@
 <p>
     <a class='text-dark' href="{% url 'accounts:registration' %}">
         <input class='btn btn-success' type="submit" value="Регистрация">
+    </a>
+</p>
+
+<p>
+    <a href="{% url 'social:begin' 'vk-oauth2' %}">
+        <img src="{% static 'accounts/img/vk.png' %}" alt="VK" height="50" width="50">
     </a>
 </p>
 {% endblock after_form %}

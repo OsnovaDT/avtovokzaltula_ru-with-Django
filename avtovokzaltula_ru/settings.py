@@ -20,6 +20,9 @@ INSTALLED_APPS = [
 
     'bus_stations',
     'accounts',
+
+    # For VK login
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -45,6 +48,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # For VK login
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -113,3 +120,22 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
+# For VK login
+
+# SOCIAL_AUTH_POSTGRES_JSONFIELD = True
+
+AUTHENTICATION_BACKENDS = {
+    'social_core.backends.vk.VKOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+}
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = config(
+    'SOCIAL_AUTH_VK_OAUTH2_KEY'
+)
+
+SOCIAL_AUTH_VK_OAUTH2_SECRET = config(
+    'SOCIAL_AUTH_VK_OAUTH2_SECRET'
+)
+
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
