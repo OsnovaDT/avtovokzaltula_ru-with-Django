@@ -2,7 +2,8 @@ from django.urls import path
 
 from .views import (
     Index, RoutesListView, FlightListView,
-    SellTicketView
+    SellTicketView, TicketListView,
+    DeleteTicketView
 )
 
 app_name = 'bus_stations'
@@ -25,10 +26,24 @@ urlpatterns = [
         name='flights'
     ),
 
-    # Path to buy ticket form
+    # Sell ticket
     path(
-        'buy_ticket',
+        'sell_ticket/',
         SellTicketView.as_view(),
-        name='buy_ticket'
+        name='sell_ticket'
+    ),
+
+    # Print all tickets
+    path(
+        'all_tickets/',
+        TicketListView.as_view(),
+        name='all_tickets',
+    ),
+
+    # Delete ticket
+    path(
+        'delete_ticket/<int:pk>/',
+        DeleteTicketView.as_view(),
+        name='delete_ticket'
     )
 ]

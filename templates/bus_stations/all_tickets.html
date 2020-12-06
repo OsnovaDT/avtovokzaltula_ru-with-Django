@@ -1,0 +1,50 @@
+{% extends 'layouts/basic.html' %}
+
+{% block title %}
+Список билетов
+{% endblock title %}
+
+{% block content %}
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-md-6 offset-3 text-center">
+            <h4>
+                <b>
+                    Все билеты
+                </b>
+            </h4>
+            <table width="100%">
+                <tr>
+                    <th>Автовокзал</th>
+                    <th>Маршрут</th>
+                    <th>Цена</th>
+                    <th>Покупатель</th>
+                    <th>Продавец</th>
+                </tr>
+                {% for ticket in tickets %}
+                <tr>
+                    <td width='200'>
+                        <a class='text-dark' href="{% url 'bus_stations:routes' ticket.bus_station.pk %}">
+                            {{ ticket.bus_station }}
+                        </a>
+                    </td>
+                    <td width='150'>
+                        <a class='text-dark' href="{% url 'bus_stations:flights' ticket.route.pk %}">
+                            {{ ticket.route }}
+                        </a>
+                    </td>
+                    <td>{{ ticket.price }}</td>
+                    <td>{{ ticket.user }}</td>
+                    <td>{{ ticket.seller }}</td>
+                    <td>
+                        <a href="{% url 'bus_stations:delete_ticket' ticket.pk %}">
+                            <input class='btn btn-danger' type="submit" value="Удалить">
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

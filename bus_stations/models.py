@@ -196,7 +196,7 @@ class Driver(models.Model):
         ordering = ['name', 'second_name', 'middle_name']
 
 
-class SellTicket(models.Model):
+class Ticket(models.Model):
     bus_station = models.ForeignKey(
         'BusStation',
         on_delete=models.PROTECT,
@@ -222,3 +222,11 @@ class SellTicket(models.Model):
         'Продавец',
         max_length=255
     )
+
+    def __str__(self):
+        return f'{self.bus_station} - {self.route} - {self.user}'
+
+    class Meta:
+        verbose_name = 'Билет'
+        verbose_name_plural = 'Билеты'
+        ordering = ['bus_station', 'route']

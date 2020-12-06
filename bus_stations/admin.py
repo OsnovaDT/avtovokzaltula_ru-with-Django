@@ -2,7 +2,7 @@ from django.contrib import admin
 
 
 from .models import (
-    BusStation, Route, Flight, Bus, Driver, SellTicket
+    BusStation, Route, Flight, Bus, Driver, Ticket
 )
 
 
@@ -54,7 +54,7 @@ class DriverAdmin(admin.ModelAdmin):
     search_fields = ('name', 'bus', 'passport_number')
 
 
-class SellTicketAdmin(admin.ModelAdmin):
+class TicketAdmin(admin.ModelAdmin):
     list_display = (
         'bus_station', 'route',
         'price', 'user',
@@ -69,4 +69,4 @@ admin.site.register(Route, RouteAdmin)
 admin.site.register(Flight, FlightAdmin)
 admin.site.register(Bus, BusAdmin)
 admin.site.register(Driver, DriverAdmin)
-admin.site.register(SellTicket, SellTicketAdmin)
+admin.site.register(Ticket, TicketAdmin)

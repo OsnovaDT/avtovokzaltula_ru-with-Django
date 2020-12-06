@@ -1,12 +1,15 @@
 from time import gmtime
 
-from .models import BusStation, Route, Flight, Bus, Driver
+from .models import (
+    BusStation, Route, Flight,
+    Bus, Driver, Ticket
+)
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import (
     LoginRequiredMixin, UserPassesTestMixin
 )
 from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, DeleteView
 
 from .forms import SellTicketForm
 
@@ -68,7 +71,29 @@ class FlightListView(LoginRequiredMixin, ListView):
 class SellTicketView(UserPassesTestMixin, CreateView):
     form_class = SellTicketForm
     template_name = 'bus_stations/sell_ticket.html'
-    success_url = reverse_lazy('bus_stations:buy_ticket')
+    success_url = reverse_lazy('bus_stations:sell_ticket')
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+
+class TicketListView(UserPassesTestMixin, ListView):
+    template_name = 'bus_stations/all_tickets.html'
+    context_object_name = 'tickets'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def get_queryset(self):
+        return Ticket.objects.all().select_related(
+            'route', 'bus_station'
+        )
+
+
+class DeleteTicketView(UserPassesTestMixin, DeleteView):
+    template_name = 'bus_stations/delete_ticket.html'
+    model = Ticket
+    success_url = reverse_lazy('bus_stations:all_tickets')
 
     def test_func(self):
         return self.request.user.is_staff
