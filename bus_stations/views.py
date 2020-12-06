@@ -44,9 +44,32 @@ class FlightListView(LoginRequiredMixin, ListView):
             'bus_station'
         ).get(pk=self.kwargs['route_id'])
 
+        # Next flight
         context['next_flight'] = get_next_flight(Flight.objects.all())
 
+        context['travel_time'] = get_travel_time(
+            Flight.objects.filter(
+                route=self.kwargs['route_id']
+            ).first().departure_time,
+            Flight.objects.filter(
+                route=self.kwargs['route_id']
+            ).first().arrival_time
+        )
+
         return context
+
+
+def get_travel_time(departure_time, arrival_time):
+    departure_hours_in_minute = int(str(departure_time)[:2]) * 60
+    arrival_hours_in_minute = int(str(arrival_time)[:2]) * 60
+
+    departure_minute = int(str(departure_time)[3:5])
+    arrival_minute = int(str(arrival_time)[3:5])
+
+    travel_minute = (arrival_hours_in_minute + arrival_minute) - \
+        (departure_hours_in_minute + departure_minute)
+
+    return f'{travel_minute // 60}:{travel_minute % 60}:00'
 
 
 def get_next_flight(flights):

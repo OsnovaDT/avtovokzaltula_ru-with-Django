@@ -7,7 +7,7 @@
 {% block content %}
 <div class="jumbotron">
     <div class="row">
-        <div class="col-md-6 offset-3 text-center">
+        <div class="col-md-8 offset-2 text-center">
             <h4>
                 <b>
                     Расписание отправлений с автовокзала <a class='text-dark'
@@ -20,8 +20,10 @@
                 <tr>
                     <th width='180'>Время отправления</th>
                     <th width='180'>Время прибытия</th>
+                    <th width='180'>Время в пути</th>
                     <th width='150'>Маршрут</th>
                     <th width='220'>Число свободных мест</th>
+                    <th width='180'>Цена билета</th>
                     <th width='110'>Автобус</th>
                 </tr>
 
@@ -37,6 +39,11 @@
                         {{ flight.arrival_time }}
                     </td>
 
+                    <!-- Travel time -->
+                    <td>
+                        {{ travel_time }}
+                    </td>
+
                     <!-- Route -->
                     <td>
                         <a class='text-dark'
@@ -46,6 +53,9 @@
 
                     <!-- Free places amount -->
                     <td>{{ flight.amount_of_free_places }}</td>
+
+                    <!-- Ticket price -->
+                    <td>{{ flight.route.price }} ₽</td>
 
                     <!-- Bus -->
                     <td>{{ flight.bus }}</td>
@@ -71,6 +81,11 @@
                     {{ next_flight.arrival_time }}
                 </td>
 
+                <!-- Travel time -->
+                <td width='180'>
+                    {{ travel_time }}
+                </td>
+
                 <!-- Route -->
                 <td width='150'>
                     <a class='text-dark'
@@ -81,6 +96,9 @@
 
                 <!-- Free places amount -->
                 <td width='220'>{{ next_flight.amount_of_free_places }}</td>
+
+                <!-- Ticket price -->
+                <td width='180'>{{ next_flight.route.price }} ₽</td>
 
                 <!-- Bus -->
                 <td width='110'>{{ next_flight.bus }}</td>
