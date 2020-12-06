@@ -25,3 +25,21 @@ class RoutesListView(LoginRequiredMixin, ListView):
         )
 
         return context
+
+
+class FlightListView(LoginRequiredMixin, ListView):
+    template_name = 'bus_stations/route_flights.html'
+    context_object_name = 'flights'
+
+    def get_queryset(self):
+        return Flight.objects.filter(
+            route=self.kwargs['route_id']
+        )
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['route'] = Route.objects.get(
+            pk=self.kwargs['route_id']
+        )
+
+        return context

@@ -1,0 +1,54 @@
+{% extends 'layouts/basic.html' %}
+
+{% block title %}
+Рейсы маршрута {{ route.bus_station }} - {{ route }}
+{% endblock title %}
+
+{% block content %}
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-md-6 offset-3 text-center">
+            <h4>
+                <b>
+                    Расписание отправлений с автовокзала <a class='text-dark'
+                        href="{% url 'bus_stations:routes' route.bus_station.pk %}">{{ route.bus_station }}</a>
+                </b>
+            </h4>
+            <h5>по маршруту {{ route }}</h5>
+            <table width="100%">
+                <tr>
+                    <th>Время отправления</th>
+                    <th>Время прибытия</th>
+                    <th>Маршрут</th>
+                    <th>Число свободных мест</th>
+                    <th>Автобус</th>
+                </tr>
+                {% for flight in flights %}
+                <!-- Departure time -->
+                <td>
+                    {{ flight.departure_time }}
+                </td>
+
+                <!-- Arrival time -->
+                <td>
+                    {{ flight.arrival_time }}
+                </td>
+
+                <!-- Route -->
+                <td>
+                    <a class='text-dark'
+                        href="{% url 'bus_stations:routes' flight.bus_station.pk %}">{{ flight.bus_station }}</a> -
+                    {{ route }}
+                </td>
+
+                <!-- Free places amount -->
+                <td>{{ flight.amount_of_free_places }}</td>
+
+                <!-- Bus -->
+                <td>{{ flight.bus }}</td>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

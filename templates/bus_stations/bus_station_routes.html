@@ -27,7 +27,11 @@
                 </tr>
                 {% for route in routes %}
                 <tr>
-                    <td width='200'>{{ route }}</td>
+                    <td width='200'>
+                        <a class='text-dark' href="{% url 'bus_stations:flights' route.pk %}">
+                            {{ route }}
+                        </a>
+                    </td>
                     <td width='150'>
                         {{ route.regularity }}
                     </td>
