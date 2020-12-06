@@ -15,37 +15,41 @@
                 </b>
             </h4>
             <h5>по маршруту {{ route }}</h5>
+            <h5>на {% now 'd.m.Y' %}</h5>
             <table width="100%">
                 <tr>
-                    <th>Время отправления</th>
-                    <th>Время прибытия</th>
-                    <th>Маршрут</th>
-                    <th>Число свободных мест</th>
-                    <th>Автобус</th>
+                    <th width='180'>Время отправления</th>
+                    <th width='180'>Время прибытия</th>
+                    <th width='150'>Маршрут</th>
+                    <th width='220'>Число свободных мест</th>
+                    <th width='110'>Автобус</th>
                 </tr>
+
                 {% for flight in flights %}
-                <!-- Departure time -->
-                <td>
-                    {{ flight.departure_time }}
-                </td>
+                <tr>
+                    <!-- Departure time -->
+                    <td>
+                        {{ flight.departure_time }}
+                    </td>
 
-                <!-- Arrival time -->
-                <td>
-                    {{ flight.arrival_time }}
-                </td>
+                    <!-- Arrival time -->
+                    <td>
+                        {{ flight.arrival_time }}
+                    </td>
 
-                <!-- Route -->
-                <td>
-                    <a class='text-dark'
-                        href="{% url 'bus_stations:routes' flight.bus_station.pk %}">{{ flight.bus_station }}</a> -
-                    {{ route }}
-                </td>
+                    <!-- Route -->
+                    <td>
+                        <a class='text-dark'
+                            href="{% url 'bus_stations:routes' flight.bus_station.pk %}">{{ flight.bus_station }}</a> -
+                        {{ route }}
+                    </td>
 
-                <!-- Free places amount -->
-                <td>{{ flight.amount_of_free_places }}</td>
+                    <!-- Free places amount -->
+                    <td>{{ flight.amount_of_free_places }}</td>
 
-                <!-- Bus -->
-                <td>{{ flight.bus }}</td>
+                    <!-- Bus -->
+                    <td>{{ flight.bus }}</td>
+                </tr>
                 {% endfor %}
             </table>
         </div>
