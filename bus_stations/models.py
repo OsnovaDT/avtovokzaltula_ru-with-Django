@@ -194,3 +194,31 @@ class Driver(models.Model):
         verbose_name = 'Водитель'
         verbose_name_plural = 'Водители'
         ordering = ['name', 'second_name', 'middle_name']
+
+
+class SellTicket(models.Model):
+    bus_station = models.ForeignKey(
+        'BusStation',
+        on_delete=models.PROTECT,
+        verbose_name='Автовокзал'
+    )
+
+    route = models.ForeignKey(
+        'Route',
+        on_delete=models.PROTECT,
+        verbose_name='Маршрут'
+    )
+
+    price = models.PositiveSmallIntegerField(
+        'Цена'
+    )
+
+    user = models.CharField(
+        'Покупатель',
+        max_length=255
+    )
+
+    seller = models.CharField(
+        'Продавец',
+        max_length=255
+    )

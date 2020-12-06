@@ -2,7 +2,13 @@ from time import gmtime
 
 from .models import BusStation, Route, Flight, Bus, Driver
 from django.views.generic.list import ListView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin, UserPassesTestMixin
+)
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView
+
+from .forms import SellTicketForm
 
 
 class Index(LoginRequiredMixin, ListView):
@@ -57,6 +63,15 @@ class FlightListView(LoginRequiredMixin, ListView):
         )
 
         return context
+
+
+class SellTicketView(UserPassesTestMixin, CreateView):
+    form_class = SellTicketForm
+    template_name = 'bus_stations/sell_ticket.html'
+    success_url = reverse_lazy('bus_stations:buy_ticket')
+
+    def test_func(self):
+        return self.request.user.is_staff
 
 
 def get_travel_time(departure_time, arrival_time):
