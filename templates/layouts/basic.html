@@ -18,14 +18,15 @@
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
         crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'bus_stations/css/style.css' %}">
+    <link rel="shortcut icon" type="image/png" href="{% static 'bus_stations/img/favicon.ico' %}" />
     <title>{% block title %}{% endblock title %}</title>
 </head>
 
 <body>
     <nav class='navbar navbar-expand-lg navbar-dark bg-dark'>
         <a class='navbar-brand' href='{% url "bus_stations:index" %}'>
-            <img src='{% static "img/logo.png" %}' width='50' height='50'>
+            <img src='{% static "bus_stations/img/logo.png" %}' width='50' height='50'>
             Главная
         </a>
         <div class='collapse navbar-collapse'>
