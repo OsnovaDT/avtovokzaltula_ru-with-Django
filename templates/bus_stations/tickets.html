@@ -8,11 +8,15 @@
 <div class="jumbotron">
     <div class="row">
         <div class="col-md-6 offset-3 text-center">
-            <h4>
+            {% if tickets %}
+            <h3>
                 <b>
-                    Все билеты
+                    Билеты на рейс {{ route }} - {{ route.bus_station }}
                 </b>
-            </h4>
+            </h3>
+            <h3>
+                <b>На время {{ departure_time }}</b>
+            </h3>
             <table width="100%">
                 <tr>
                     <th width='100'>Автовокзал</th>
@@ -21,6 +25,7 @@
                     <th>Цена</th>
                     <th>Покупатель</th>
                     <th>Продавец</th>
+                    <th>Удалить билет</th>
                 </tr>
                 {% for ticket in tickets %}
                 <tr>
@@ -46,6 +51,13 @@
                 </tr>
                 {% endfor %}
             </table>
+            {% else %}
+            <h1>Билетов по данному рейсу нет</h1>
+            {% endif %}
+            <br>
+            <a href="{% url 'bus_stations:flights' route.pk %}">
+                <input class='btn btn-success btn-lg' type="submit" value="Назад">
+            </a>
         </div>
     </div>
 </div>

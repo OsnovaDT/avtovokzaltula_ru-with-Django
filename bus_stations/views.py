@@ -120,6 +120,15 @@ class TicketListView(UserPassesTestMixin, ListView):
             departure_time=self.kwargs['departure_time']
         )
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['route'] = Route.objects.get(
+            pk=self.kwargs['route_id']
+        )
+        context['departure_time'] = self.kwargs['departure_time']
+
+        return context
+
 
 class DeleteTicketView(UserPassesTestMixin, DeleteView):
     template_name = 'bus_stations/delete_ticket.html'

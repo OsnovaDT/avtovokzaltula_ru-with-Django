@@ -24,7 +24,7 @@
                     <th width='150'>Маршрут</th>
                     <th width='220'>Число свободных мест</th>
                     <th width='180'>Цена билета</th>
-                    <th width='110'>Автобус</th>
+                    <th width='130'>Автобус</th>
                     {% if user.is_staff %}
                     <th width='200'>Список проданных билетов</th>
                     {% endif %}
@@ -114,7 +114,7 @@
                 <td width='180'>{{ next_flight.route.price }} ₽</td>
 
                 <!-- Bus -->
-                <td width='110'>{{ next_flight.bus }}</td>
+                <td width='130'>{{ next_flight.bus }}</td>
 
                 <!-- Sell tickets -->
                 {% if user.is_staff %}
