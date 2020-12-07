@@ -55,7 +55,12 @@ class FlightListView(LoginRequiredMixin, ListView):
         ).get(pk=self.kwargs['route_id'])
 
         # Next flight
-        context['next_flight'] = get_next_flight(Flight.objects.all())
+        context['next_flight'] = get_next_flight(
+            Flight.objects.filter(
+                bus_station=context['route'].bus_station,
+                route=context['route']
+            )
+        )
 
         context['travel_time'] = get_travel_time(
             Flight.objects.filter(
