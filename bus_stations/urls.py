@@ -35,9 +35,10 @@ urlpatterns = [
 
     # Print all tickets
     path(
-        'all_tickets/',
+        '<int:bus_station_id>/<int:route_id>/' +
+        '<str:departure_time>/tickets/',
         TicketListView.as_view(),
-        name='all_tickets',
+        name='tickets',
     ),
 
     # Delete ticket

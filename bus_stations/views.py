@@ -62,6 +62,11 @@ class FlightListView(LoginRequiredMixin, ListView):
             )
         )
 
+        context['tickets'] = Ticket.objects.filter(
+            bus_station=context['route'].bus_station,
+            route=context['route']
+        )
+
         context['travel_time'] = get_travel_time(
             Flight.objects.filter(
                 route=self.kwargs['route_id']
@@ -102,15 +107,17 @@ class SellTicketView(UserPassesTestMixin, CreateView):
 
 
 class TicketListView(UserPassesTestMixin, ListView):
-    template_name = 'bus_stations/all_tickets.html'
+    template_name = 'bus_stations/tickets.html'
     context_object_name = 'tickets'
 
     def test_func(self):
         return self.request.user.is_staff
 
     def get_queryset(self):
-        return Ticket.objects.all().select_related(
-            'route', 'bus_station'
+        return Ticket.objects.filter(
+            bus_station=self.kwargs['bus_station_id'],
+            route=self.kwargs['route_id'],
+            departure_time=self.kwargs['departure_time']
         )
 
 
@@ -127,7 +134,22 @@ class DeleteTicketView(UserPassesTestMixin, DeleteView):
         delete_ticket_flight.amount_of_free_places += 1
         delete_ticket_flight.save()
 
-        return reverse_lazy('bus_stations:all_tickets')
+        return reverse_lazy(
+            'bus_stations:tickets',
+            args=[
+                delete_ticket_flight.bus_station.pk,
+                delete_ticket_flight.route.pk,
+                delete_ticket_flight.departure_time,
+            ]
+        )
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['bus_station_pk'] = self.get_object().bus_station.pk
+        context['route_pk'] = self.get_object().route.pk
+        context['departure_time'] = self.get_object().departure_time
+
+        return context
 
     def test_func(self):
         return self.request.user.is_staff
