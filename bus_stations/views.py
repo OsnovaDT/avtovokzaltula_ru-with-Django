@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import (
 )
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, DeleteView
+from django.forms import ValidationError
 
 from .forms import SellTicketForm
 
@@ -73,6 +74,24 @@ class SellTicketView(UserPassesTestMixin, CreateView):
     template_name = 'bus_stations/sell_ticket.html'
     success_url = reverse_lazy('bus_stations:sell_ticket')
 
+    def form_valid(self, SellTicketForm):
+        sell_ticket_data = self.get_form_kwargs()['data']
+        try:
+            sell_ticket_flight = Flight.objects.get(
+                bus_station=sell_ticket_data['bus_station'],
+                route=sell_ticket_data['route'],
+                departure_time=sell_ticket_data['departure_time'],
+            )
+        except Exception as e:
+            sell_ticket_flight = ''
+
+            raise ValidationError(e)
+
+        sell_ticket_flight.amount_of_free_places -= 1
+        sell_ticket_flight.save()
+
+        return super().form_valid(SellTicketForm)
+
     def test_func(self):
         return self.request.user.is_staff
 
@@ -93,7 +112,17 @@ class TicketListView(UserPassesTestMixin, ListView):
 class DeleteTicketView(UserPassesTestMixin, DeleteView):
     template_name = 'bus_stations/delete_ticket.html'
     model = Ticket
-    success_url = reverse_lazy('bus_stations:all_tickets')
+
+    def get_success_url(self):
+        delete_ticket_flight = Flight.objects.get(
+            bus_station=self.get_object().bus_station,
+            route=self.get_object().route,
+            departure_time=self.get_object().departure_time
+        )
+        delete_ticket_flight.amount_of_free_places += 1
+        delete_ticket_flight.save()
+
+        return reverse_lazy('bus_stations:all_tickets')
 
     def test_func(self):
         return self.request.user.is_staff
