@@ -114,7 +114,9 @@ class Flight(models.Model):
     )
 
     def __str__(self):
-        return f'{self.bus_station} - {self.route}'
+        return str(self.bus_station) + " - " + \
+            str(self.route) + " - " + \
+            str(self.departure_time)
 
     class Meta:
         verbose_name = 'Рейс'
@@ -187,8 +189,10 @@ class Driver(models.Model):
     )
 
     def __str__(self):
-        return f'{self.second_name} {self.name}[0].\
-            {self.middle_name}[0]. - {self.passport_number}'
+        return str(self.second_name) + " " + \
+            str(self.name[0]) + "." + \
+            str(self.middle_name[0]) + ". - " + \
+            str(self.passport_number)
 
     class Meta:
         verbose_name = 'Водитель'
@@ -209,6 +213,11 @@ class Ticket(models.Model):
         verbose_name='Маршрут'
     )
 
+    departure_time = models.TimeField(
+        'Время отправления',
+        default='12:00'
+    )
+
     price = models.PositiveSmallIntegerField(
         'Цена'
     )
@@ -224,7 +233,9 @@ class Ticket(models.Model):
     )
 
     def __str__(self):
-        return f'{self.bus_station} - {self.route} - {self.user}'
+        return str(self.bus_station) + " - " + \
+            str(self.route) + " - " + \
+            str(self.user)
 
     class Meta:
         verbose_name = 'Билет'

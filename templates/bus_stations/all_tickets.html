@@ -15,25 +15,27 @@
             </h4>
             <table width="100%">
                 <tr>
-                    <th>Автовокзал</th>
-                    <th>Маршрут</th>
+                    <th width='100'>Автовокзал</th>
+                    <th width='100'>Маршрут</th>
+                    <th>Время отправления</th>
                     <th>Цена</th>
                     <th>Покупатель</th>
                     <th>Продавец</th>
                 </tr>
                 {% for ticket in tickets %}
                 <tr>
-                    <td width='200'>
+                    <td>
                         <a class='text-dark' href="{% url 'bus_stations:routes' ticket.bus_station.pk %}">
                             {{ ticket.bus_station }}
                         </a>
                     </td>
-                    <td width='150'>
+                    <td>
                         <a class='text-dark' href="{% url 'bus_stations:flights' ticket.route.pk %}">
                             {{ ticket.route }}
                         </a>
                     </td>
-                    <td>{{ ticket.price }}</td>
+                    <td>{{ ticket.departure_time }}</td>
+                    <td>{{ ticket.price }} ₽</td>
                     <td>{{ ticket.user }}</td>
                     <td>{{ ticket.seller }}</td>
                     <td>
