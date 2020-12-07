@@ -18,7 +18,7 @@ class BusStationAdmin(admin.ModelAdmin):
 class RouteAdmin(admin.ModelAdmin):
     list_display = (
         'name', 'regularity',
-        'departure_time', 'stopover',
+        'departure_time',
         'price', 'bus_station'
     )
     list_display_links = ('name', 'bus_station')

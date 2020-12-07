@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator
 
 
 class BusStation(models.Model):
@@ -53,13 +54,6 @@ class Route(models.Model):
         'Время отправления',
         help_text='Всё возможное время отправления',
         max_length=255,
-    )
-
-    stopover = models.CharField(
-        'Остановки',
-        max_length=255,
-        null=True,
-        blank=True,
     )
 
     price = models.PositiveSmallIntegerField(
@@ -180,11 +174,12 @@ class Driver(models.Model):
 
     age = models.PositiveSmallIntegerField(
         'Возраст',
+        validators=[MinValueValidator(21)]
     )
 
     bus = models.OneToOneField(
         'Bus',
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         verbose_name='Автобус'
     )
 
