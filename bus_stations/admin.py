@@ -55,12 +55,12 @@ class DriverAdmin(admin.ModelAdmin):
 
 class TicketAdmin(admin.ModelAdmin):
     list_display = (
-        'bus_station', 'route',
-        'price', 'user',
-        'seller'
+        'flight', 'user', 'seller'
     )
-    list_display_links = ('bus_station', 'route', 'user', 'seller')
-    search_fields = ('bus_station', 'route', 'user', 'seller')
+    list_display_links = (
+        'flight', 'user', 'seller'
+    )
+    search_fields = ('flight', 'user', 'seller')
 
 
 admin.site.register(BusStation, BusStationAdmin)

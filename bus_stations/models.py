@@ -67,7 +67,7 @@ class Route(models.Model):
     )
 
     def __str__(self):
-        return self.name
+        return str(self.bus_station) + " - " + str(self.name)
 
     class Meta:
         verbose_name = 'Маршрут'
@@ -95,15 +95,14 @@ class Flight(models.Model):
         default=30,
     )
 
-    bus = models.OneToOneField(
+    bus = models.ForeignKey(
         'Bus',
         on_delete=models.CASCADE,
         verbose_name='Автобус',
     )
 
     def __str__(self):
-        return str(self.route.bus_station) + " - " + \
-            str(self.route) + " - " + \
+        return str(self.route) + " - " + \
             str(self.departure_time)
 
     class Meta:
@@ -127,6 +126,12 @@ class Bus(models.Model):
 
     amount_of_places = models.PositiveSmallIntegerField(
         'Число мест',
+    )
+
+    driver = models.OneToOneField(
+        'Driver',
+        on_delete=models.PROTECT,
+        verbose_name='Водитель',
     )
 
     def __str__(self):
@@ -160,10 +165,10 @@ class Driver(models.Model):
         max_length=255
     )
 
-    phone_number = models.CharField(
+    phone_number = models.BigIntegerField(
         'Номер телефона',
-        max_length=15,
         unique=True,
+        validators=[MinValueValidator(1)]
     )
 
     age = models.PositiveSmallIntegerField(
@@ -171,17 +176,10 @@ class Driver(models.Model):
         validators=[MinValueValidator(21)]
     )
 
-    bus = models.OneToOneField(
-        'Bus',
-        on_delete=models.PROTECT,
-        verbose_name='Автобус'
-    )
-
-    def __str__(self):
-        return str(self.second_name) + " " + \
-            str(self.name[0]) + "." + \
-            str(self.middle_name[0]) + ". - " + \
-            str(self.passport_number)
+    def __str__(self): return str(self.second_name) + " " + \
+        str(self.name[0]) + "." + \
+        str(self.middle_name[0]) + ". - " + \
+        str(self.passport_number)
 
     class Meta:
         verbose_name = 'Водитель'
@@ -190,25 +188,10 @@ class Driver(models.Model):
 
 
 class Ticket(models.Model):
-    bus_station = models.ForeignKey(
-        'BusStation',
+    flight = models.ForeignKey(
+        'Flight',
         on_delete=models.PROTECT,
-        verbose_name='Автовокзал'
-    )
-
-    route = models.ForeignKey(
-        'Route',
-        on_delete=models.PROTECT,
-        verbose_name='Маршрут'
-    )
-
-    departure_time = models.TimeField(
-        'Время отправления',
-        default='12:00'
-    )
-
-    price = models.PositiveSmallIntegerField(
-        'Цена'
+        verbose_name='Рейс',
     )
 
     user = models.CharField(
@@ -221,12 +204,17 @@ class Ticket(models.Model):
         max_length=255
     )
 
+    registration_time = models.DateTimeField(
+        'Время оформления',
+        auto_now_add=True,
+    )
+
     def __str__(self):
-        return str(self.bus_station) + " - " + \
-            str(self.route) + " - " + \
+        return str(self.flight) + \
+            " - " + \
             str(self.user)
 
     class Meta:
         verbose_name = 'Билет'
         verbose_name_plural = 'Билеты'
-        ordering = ['bus_station', 'route']
+        ordering = ['flight']

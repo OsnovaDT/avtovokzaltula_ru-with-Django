@@ -11,36 +11,21 @@
             {% if tickets %}
             <h3>
                 <b>
-                    Билеты на рейс {{ route }} - {{ route.bus_station }}
+                    Билеты на рейс {{ flight }}
                 </b>
-            </h3>
-            <h3>
-                <b>На время {{ departure_time }}</b>
             </h3>
             <table width="100%">
                 <tr>
-                    <th width='100'>Автовокзал</th>
-                    <th width='100'>Маршрут</th>
-                    <th>Время отправления</th>
-                    <th>Цена</th>
-                    <th>Покупатель</th>
-                    <th>Продавец</th>
-                    <th>Удалить билет</th>
+                    <th width='100'>Рейс</th>
+                    <th width='50'>Цена</th>
+                    <th width='100'>Покупатель</th>
+                    <th width='80'>Продавец</th>
+                    <th width='100'>Удалить билет</th>
                 </tr>
                 {% for ticket in tickets %}
                 <tr>
-                    <td>
-                        <a class='text-dark' href="{% url 'bus_stations:routes' ticket.bus_station.pk %}">
-                            {{ ticket.bus_station }}
-                        </a>
-                    </td>
-                    <td>
-                        <a class='text-dark' href="{% url 'bus_stations:flights' ticket.route.pk %}">
-                            {{ ticket.route }}
-                        </a>
-                    </td>
-                    <td>{{ ticket.departure_time }}</td>
-                    <td>{{ ticket.price }} ₽</td>
+                    <td>{{ ticket.flight }}</td>
+                    <td>{{ ticket.flight.route.price }} ₽</td>
                     <td>{{ ticket.user }}</td>
                     <td>{{ ticket.seller }}</td>
                     <td>
@@ -55,7 +40,7 @@
             <h1>Билетов по данному рейсу нет</h1>
             {% endif %}
             <br>
-            <a href="{% url 'bus_stations:flights' route.pk %}">
+            <a href="{% url 'bus_stations:flights' flight.route.pk %}">
                 <input class='btn btn-success btn-lg' type="submit" value="Назад">
             </a>
         </div>

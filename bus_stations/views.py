@@ -46,11 +46,13 @@ class FlightListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Flight.objects.filter(
             route=self.kwargs['route_id']
-        ).select_related('route', 'bus')
+        ).select_related('route', 'bus', 'route__bus_station')
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['route'] = Route.objects.get(pk=self.kwargs['route_id'])
+        context['route'] = Route.objects.get(
+            pk=self.kwargs['route_id']
+        )
 
         # Next flight
         context['next_flight'] = get_next_flight(
@@ -60,8 +62,7 @@ class FlightListView(LoginRequiredMixin, ListView):
         )
 
         context['tickets'] = Ticket.objects.filter(
-            bus_station=context['route'].bus_station,
-            route=context['route']
+            flight__route=context['route']
         )
 
         context['travel_time'] = get_travel_time(
@@ -82,18 +83,9 @@ class SellTicketView(UserPassesTestMixin, CreateView):
     success_url = reverse_lazy('bus_stations:sell_ticket')
 
     def form_valid(self, SellTicketForm):
-        sell_ticket_data = self.get_form_kwargs()['data']
-        try:
-            sell_ticket_flight = Flight.objects.get(
-                route__bus_station=sell_ticket_data['bus_station'],
-                route=sell_ticket_data['route'],
-                departure_time=sell_ticket_data['departure_time'],
-                route__price=sell_ticket_data['price']
-            )
-        except Exception as e:
-            sell_ticket_flight = ''
-
-            raise ValidationError(e)
+        sell_ticket_flight = Flight.objects.get(
+            pk=self.get_form_kwargs()['data']['flight']
+        )
 
         sell_ticket_flight.amount_of_free_places -= 1
         sell_ticket_flight.save()
@@ -113,17 +105,14 @@ class TicketListView(UserPassesTestMixin, ListView):
 
     def get_queryset(self):
         return Ticket.objects.filter(
-            bus_station=self.kwargs['bus_station_id'],
-            route=self.kwargs['route_id'],
-            departure_time=self.kwargs['departure_time']
+            flight=self.kwargs['flight_id'],
         )
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['route'] = Route.objects.get(
-            pk=self.kwargs['route_id']
+        context['flight'] = Flight.objects.get(
+            pk=self.kwargs['flight_id']
         )
-        context['departure_time'] = self.kwargs['departure_time']
 
         return context
 
@@ -131,37 +120,31 @@ class TicketListView(UserPassesTestMixin, ListView):
 class DeleteTicketView(UserPassesTestMixin, DeleteView):
     template_name = 'bus_stations/delete_ticket.html'
     model = Ticket
+    success_url = reverse_lazy('bus_stations:index')
+
+    def test_func(self):
+        return self.request.user.is_staff
 
     def get_success_url(self):
         delete_ticket_flight = Flight.objects.get(
-            route__bus_station=self.get_object().bus_station,
-            route=self.get_object().route,
-            departure_time=self.get_object().departure_time
+            pk=Ticket.objects.get(pk=self.kwargs['pk']).flight.pk
         )
         delete_ticket_flight.amount_of_free_places += 1
         delete_ticket_flight.save()
 
         return reverse_lazy(
             'bus_stations:tickets',
-            args=[
-                delete_ticket_flight.route.bus_station.pk,
-                delete_ticket_flight.route.pk,
-                delete_ticket_flight.departure_time,
-            ]
+            args=[delete_ticket_flight.pk]
         )
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context[
-            'bus_station_pk'
-        ] = self.get_object().bus_station.pk
-        context['route_pk'] = self.get_object().route.pk
-        context['departure_time'] = self.get_object().departure_time
-
+            'flight'
+        ] = Flight.objects.get(
+            pk=Ticket.objects.get(pk=self.kwargs['pk']).flight.pk
+        )
         return context
-
-    def test_func(self):
-        return self.request.user.is_staff
 
 
 def get_travel_time(departure_time, arrival_time):

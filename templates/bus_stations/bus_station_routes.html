@@ -21,22 +21,21 @@
             </h6>
             <table width="100%">
                 <tr>
-                    <th>Название маршрута</th>
-                    <th>Регулярность</th>
-                    <th>Время отправления</th>
+                    <th width='150'>Название маршрута</th>
+                    <th width='120'>Регулярность</th>
+                    <th width='300'>Время отправления</th>
                 </tr>
                 {% for route in routes %}
                 <tr>
-                    <td width='200'>
+                    <td>
                         <a class='text-dark' href="{% url 'bus_stations:flights' route.pk %}">
-                            {{ route }}
+                            {{ route.name }}
                         </a>
                     </td>
-                    <td width='150'>
+                    <td>
                         {{ route.regularity }}
                     </td>
                     <td>{{ route.departure_time }}</td>
-                    </trs=>
                     {% endfor %}
             </table>
         </div>
