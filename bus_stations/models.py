@@ -76,12 +76,6 @@ class Route(models.Model):
 
 
 class Flight(models.Model):
-    bus_station = models.ForeignKey(
-        'BusStation',
-        on_delete=models.CASCADE,
-        verbose_name='Автовокзал'
-    )
-
     route = models.ForeignKey(
         'Route',
         on_delete=models.CASCADE,
@@ -108,7 +102,7 @@ class Flight(models.Model):
     )
 
     def __str__(self):
-        return str(self.bus_station) + " - " + \
+        return str(self.route.bus_station) + " - " + \
             str(self.route) + " - " + \
             str(self.departure_time)
 
@@ -116,7 +110,7 @@ class Flight(models.Model):
         verbose_name = 'Рейс'
         verbose_name_plural = 'Рейсы'
         ordering = ['departure_time']
-        unique_together = ['bus_station', 'route', 'departure_time']
+        unique_together = ['route', 'departure_time']
 
 
 class Bus(models.Model):

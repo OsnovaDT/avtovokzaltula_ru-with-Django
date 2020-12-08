@@ -50,7 +50,8 @@
                     <!-- Route -->
                     <td>
                         <a class='text-dark'
-                            href="{% url 'bus_stations:routes' flight.bus_station.pk %}">{{ flight.bus_station }}</a> -
+                            href="{% url 'bus_stations:routes' flight.route.bus_station.pk %}">{{ flight.route.bus_station }}</a>
+                        -
                         {{ route }}
                     </td>
 
@@ -67,7 +68,7 @@
                     {% if user.is_staff %}
                     <td>
                         <a class='dropdown-item'
-                            href='{% url "bus_stations:tickets" flight.bus_station.pk flight.route.pk flight.departure_time %}'>
+                            href='{% url "bus_stations:tickets" flight.route.bus_station.pk flight.route.pk flight.departure_time %}'>
                             Проданные билеты
                         </a>
                     </td>
@@ -102,7 +103,7 @@
                 <!-- Route -->
                 <td width='150'>
                     <a class='text-dark'
-                        href="{% url 'bus_stations:routes' next_flight.bus_station.pk %}">{{ next_flight.bus_station }}</a>
+                        href="{% url 'bus_stations:routes' next_flight.route.bus_station.pk %}">{{ next_flight.route.bus_station }}</a>
                     -
                     {{ route }}
                 </td>
@@ -120,7 +121,7 @@
                 {% if user.is_staff %}
                 <td width='200'>
                     <a class='dropdown-item'
-                        href='{% url "bus_stations:tickets" next_flight.bus_station.pk next_flight.route.pk next_flight.departure_time %}'>
+                        href='{% url "bus_stations:tickets" next_flight.route.bus_station.pk next_flight.route.pk next_flight.departure_time %}'>
                         Проданные билеты
                     </a>
                 </td>

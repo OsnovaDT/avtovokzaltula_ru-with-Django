@@ -27,12 +27,11 @@ class RouteAdmin(admin.ModelAdmin):
 
 class FlightAdmin(admin.ModelAdmin):
     list_display = (
-        'bus_station', 'route',
-        'departure_time', 'arrival_time',
+        'route', 'departure_time', 'arrival_time',
         'amount_of_free_places', 'bus'
     )
-    list_display_links = ('bus_station', 'route', 'bus')
-    search_fields = ('bus_station', 'route', 'bus')
+    list_display_links = ('route', 'bus')
+    search_fields = ('route', 'bus')
 
 
 class BusAdmin(admin.ModelAdmin):

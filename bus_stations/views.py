@@ -46,18 +46,15 @@ class FlightListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Flight.objects.filter(
             route=self.kwargs['route_id']
-        ).select_related('route', 'bus_station', 'bus')
+        ).select_related('route', 'bus')
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['route'] = Route.objects.select_related(
-            'bus_station'
-        ).get(pk=self.kwargs['route_id'])
+        context['route'] = Route.objects.get(pk=self.kwargs['route_id'])
 
         # Next flight
         context['next_flight'] = get_next_flight(
             Flight.objects.filter(
-                bus_station=context['route'].bus_station,
                 route=context['route']
             )
         )
@@ -88,9 +85,10 @@ class SellTicketView(UserPassesTestMixin, CreateView):
         sell_ticket_data = self.get_form_kwargs()['data']
         try:
             sell_ticket_flight = Flight.objects.get(
-                bus_station=sell_ticket_data['bus_station'],
+                route__bus_station=sell_ticket_data['bus_station'],
                 route=sell_ticket_data['route'],
                 departure_time=sell_ticket_data['departure_time'],
+                route__price=sell_ticket_data['price']
             )
         except Exception as e:
             sell_ticket_flight = ''
@@ -136,7 +134,7 @@ class DeleteTicketView(UserPassesTestMixin, DeleteView):
 
     def get_success_url(self):
         delete_ticket_flight = Flight.objects.get(
-            bus_station=self.get_object().bus_station,
+            route__bus_station=self.get_object().bus_station,
             route=self.get_object().route,
             departure_time=self.get_object().departure_time
         )
@@ -146,7 +144,7 @@ class DeleteTicketView(UserPassesTestMixin, DeleteView):
         return reverse_lazy(
             'bus_stations:tickets',
             args=[
-                delete_ticket_flight.bus_station.pk,
+                delete_ticket_flight.route.bus_station.pk,
                 delete_ticket_flight.route.pk,
                 delete_ticket_flight.departure_time,
             ]
@@ -154,7 +152,9 @@ class DeleteTicketView(UserPassesTestMixin, DeleteView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['bus_station_pk'] = self.get_object().bus_station.pk
+        context[
+            'bus_station_pk'
+        ] = self.get_object().bus_station.pk
         context['route_pk'] = self.get_object().route.pk
         context['departure_time'] = self.get_object().departure_time
 
