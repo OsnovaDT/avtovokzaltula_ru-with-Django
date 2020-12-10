@@ -218,3 +218,4 @@ class Ticket(models.Model):
         verbose_name = 'Билет'
         verbose_name_plural = 'Билеты'
         ordering = ['flight']
+        get_latest_by = 'registration_time'

@@ -3,7 +3,7 @@ from django.urls import path
 from .views import (
     Index, RoutesListView, FlightListView,
     SellTicketView, TicketListView,
-    DeleteTicketView
+    DeleteTicketView, ChequeForTicketView
 )
 
 app_name = 'bus_stations'
@@ -40,9 +40,17 @@ urlpatterns = [
         name='tickets',
     ),
 
+    # Delete ticket
     path(
         'delete_ticket/<int:pk>/',
         DeleteTicketView.as_view(),
         name='delete_ticket'
-    )
+    ),
+
+    # Cheque for ticket
+    path(
+        'cheque_for_ticket/',
+        ChequeForTicketView.as_view(),
+        name='cheque_for_ticket'
+    ),
 ]

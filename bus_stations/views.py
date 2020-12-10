@@ -5,6 +5,7 @@ from .models import (
     Bus, Driver, Ticket
 )
 from django.views.generic.list import ListView
+from django.views.generic.base import TemplateView
 from django.contrib.auth.mixins import (
     LoginRequiredMixin, UserPassesTestMixin
 )
@@ -80,7 +81,7 @@ class FlightListView(LoginRequiredMixin, ListView):
 class SellTicketView(UserPassesTestMixin, CreateView):
     form_class = SellTicketForm
     template_name = 'bus_stations/sell_ticket.html'
-    success_url = reverse_lazy('bus_stations:sell_ticket')
+    success_url = reverse_lazy('bus_stations:cheque_for_ticket')
 
     def form_valid(self, SellTicketForm):
         sell_ticket_flight = Flight.objects.get(
@@ -94,6 +95,16 @@ class SellTicketView(UserPassesTestMixin, CreateView):
 
     def test_func(self):
         return self.request.user.is_staff
+
+
+class ChequeForTicketView(TemplateView):
+    template_name = 'bus_stations/cheque_for_ticket.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['ticket'] = Ticket.objects.latest()
+
+        return context
 
 
 class TicketListView(UserPassesTestMixin, ListView):

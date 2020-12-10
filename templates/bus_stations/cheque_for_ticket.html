@@ -1,0 +1,13 @@
+{% extends 'layouts/implemented.html' %}
+
+{% block text %}
+<h3>Чек для билета №{{ ticket.pk }}</h3>
+<h5>Покупатель: {{ ticket.user }}</h5>
+<h5>Рейс {{ ticket.flight }}</h5>
+<h5>Кассир: {{ ticket.seller }}</h5>
+<h5>Дата выдачи: {{ ticket.registration_time }}</h5>
+
+<a href="{% url 'bus_stations:sell_ticket' %}">
+    <input class='btn btn-primary' type="submit" value="Продать другой билет">
+</a>
+{% endblock text %}
