@@ -1,3 +1,13 @@
+# Images of some pages
+
+The main page:
+![The main page](https://github.com/OsnovaDT/avtovokzaltula_ru/raw/master/images/index_page.png)
+
+Flights page:
+![Flights page](https://github.com/OsnovaDT/avtovokzaltula_ru/raw/master/images/flights_page.png)
+
+Login page:
+![Login page](https://github.com/OsnovaDT/avtovokzaltula_ru/raw/master/images/login_page.png)
 # Install necessary libraries
 Installation is explained for Linux Ubuntu
 
