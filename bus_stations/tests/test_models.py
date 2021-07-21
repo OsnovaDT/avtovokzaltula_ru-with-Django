@@ -42,6 +42,10 @@ class BusStationTests(TestCase):
             'office_hours': 'Часы работы через точку с запятой',
         }
 
+        self.bus_station_model_verbose_name = 'Автовокзал'
+        self.bus_station_model_verbose_name_plural = 'Автовокзалы'
+        self.bus_station_model_ordering = ['name']
+
     def test_verbose_names(self):
         """Test verbose_name parameter for fields of BusStation instances"""
 
@@ -91,7 +95,10 @@ class BusStationTests(TestCase):
 
         bus_station_model_verbose_name = BusStation._meta.verbose_name.title()
 
-        self.assertEqual(bus_station_model_verbose_name, 'Автовокзал')
+        self.assertEqual(
+            bus_station_model_verbose_name,
+            self.bus_station_model_verbose_name
+        )
 
     def test_bus_station_model_verbose_name_plural(self):
         """Test verbose_name_plural of BusStation model"""
@@ -99,11 +106,17 @@ class BusStationTests(TestCase):
         bus_station_model_verbose_name_plural = \
             BusStation._meta.verbose_name_plural.title()
 
-        self.assertEqual(bus_station_model_verbose_name_plural, 'Автовокзалы')
+        self.assertEqual(
+            bus_station_model_verbose_name_plural,
+            self.bus_station_model_verbose_name_plural
+        )
 
     def test_bus_station_model_ordering(self):
         """Test ordering of BusStation model"""
 
         bus_station_model_ordering = BusStation._meta.ordering
 
-        self.assertEqual(bus_station_model_ordering, ['name'])
+        self.assertEqual(
+            bus_station_model_ordering,
+            self.bus_station_model_ordering
+        )
