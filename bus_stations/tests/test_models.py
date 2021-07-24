@@ -13,8 +13,158 @@ from bus_stations.models import (
 
 TEST_INSTANCES_AMOUNT = 20
 
+# Mixins
 
-class BusStationTests(TestCase):
+
+class TestVerboseNameslMixin():
+    """Mixin with function for testing verbose_names"""
+
+    def test_verbose_names(self, model):
+        """Test verbose_name parameter for fields of model instances"""
+
+        for instance in model.objects.all():
+            for field, expected_verbose_name in self.fields_and_verbose_names.items():
+                real_verbose_name = instance._meta.get_field(field).verbose_name
+
+                self.assertEqual(real_verbose_name, expected_verbose_name)
+
+
+class TestMaxLengthsMixin():
+    """Mixin with function for testing max_lengths"""
+
+    def test_max_lengths(self, model):
+        """Test max_length parameter for fields of model instances"""
+
+        for instance in model.objects.all():
+            for field, expected_max_length in self.fields_and_max_lengths.items():
+                real_max_length = instance._meta.get_field(field).max_length
+
+                self.assertEqual(real_max_length, expected_max_length)
+
+
+class TestHelpTextsMixin():
+    """Mixin with function for testing help_texts"""
+
+    def test_help_texts(self, model):
+        """Test help_text parameter for fields of model instances"""
+
+        for instance in model.objects.all():
+            for field, expected_help_text in self.fields_and_help_texts.items():
+                real_help_text = instance._meta.get_field(field).help_text
+
+                self.assertEqual(real_help_text, expected_help_text)
+
+
+class TestModelVerboseNameMixin():
+    """Mixin with function for testing model verbose_name"""
+
+    def test_model_verbose_name(self, model):
+        """Test verbose_name of the model"""
+
+        real_model_verbose_name = model._meta.verbose_name.title()
+
+        self.assertEqual(real_model_verbose_name, self.model_verbose_name)
+
+
+class TestModelVerboseNamePluralMixin():
+    """Mixin with function for testing model verbose_name_plural"""
+
+    def test_model_verbose_name_plural(self, model):
+        """Test verbose_name_plural of the model"""
+
+        real_model_verbose_name_plural = \
+            model._meta.verbose_name_plural.title()
+
+        self.assertEqual(
+            real_model_verbose_name_plural,
+            self.model_verbose_name_plural
+        )
+
+
+class TestModeOrderingMixin():
+    """Mixin with function for testing model ordering"""
+
+    def test_model_ordering(self, model):
+        """Test ordering of the model"""
+
+        real_model_ordering = model._meta.ordering
+
+        self.assertEqual(
+            real_model_ordering,
+            self.model_ordering
+        )
+
+
+class TestInstanceStringDisplayMixin():
+    """Mixin with function for testing instance string display"""
+
+    def test_instance_string_display(self, instance, expected_string_display):
+        """Test string display of the model instance"""
+
+        real_string_display = str(instance)
+
+        self.assertEqual(real_string_display, expected_string_display)
+
+
+class TestUniqueFieldsMixin():
+    """Mixin with function for testing unique fields"""
+
+    def test_unique_fields(self, model):
+        """Test model instances for uniqueness"""
+
+        for instance in model.objects.all():
+            for field in self.unique_fields:
+                is_field_unique = instance._meta.get_field(field).unique
+
+                self.assertTrue(is_field_unique)
+
+
+class TestValidatorsMixin():
+    """Mixin with function for testing validators"""
+
+    def test_validators(self, model):
+        """Test validators parameter for fields of Driver instances"""
+
+        for instance in model.objects.all():
+            for field, expected_validators in self.fields_and_validators.items():
+                real_validators = instance._meta.get_field(field).validators
+
+                self.assertEqual(real_validators, expected_validators)
+
+
+class TestDefaultValuesMixin():
+    """Mixin with function for testing default values"""
+
+    def test_default_values(self, model):
+        """Test default parameter for fields of the model"""
+
+        for instance in model.objects.all():
+            for field, expected_default_value in self.fields_and_default_values.items():
+                real_default_value = instance._meta.get_field(field).default
+
+                self.assertEqual(real_default_value, expected_default_value)
+
+
+class TestModelGetLatestByMixin():
+    """Mixin with function for testing model get_latest_by"""
+
+    def test_model_get_latest_by(self, model):
+        """Test get_latest_by of the model"""
+
+        real_model_get_latest_by = model._meta.get_latest_by
+
+        self.assertEqual(real_model_get_latest_by, self.model_get_latest_by)
+
+
+# Test classes
+
+
+class BusStationTests(
+        TestCase, TestVerboseNameslMixin, TestMaxLengthsMixin,
+        TestHelpTextsMixin, TestModelVerboseNameMixin,
+        TestModelVerboseNamePluralMixin, TestModeOrderingMixin,
+        TestInstanceStringDisplayMixin, TestUniqueFieldsMixin
+    ):
     """Test class for BusStation model"""
 
     def setUp(self):
@@ -55,74 +205,51 @@ class BusStationTests(TestCase):
     def test_verbose_names(self):
         """Test verbose_name parameter for fields of BusStation instances"""
 
-        for bus_station in BusStation.objects.all():
-            for field, expected_verbose_name in self.fields_and_verbose_names.items():
-                real_verbose_name = bus_station._meta.get_field(field).verbose_name
-
-                self.assertEqual(real_verbose_name, expected_verbose_name)
+        super().test_verbose_names(BusStation)
 
     def test_max_lengths(self):
         """Test max_length parameter for fields of BusStation instances"""
 
-        for bus_station in BusStation.objects.all():
-            for field, expected_max_length in self.fields_and_max_lengths.items():
-                real_max_length = bus_station._meta.get_field(field).max_length
-
-                self.assertEqual(real_max_length, expected_max_length)
-
-    def test_unique_fields(self):
-        """Test BusStation instances for uniqueness"""
-
-        for bus_station in BusStation.objects.all():
-            for field in self.unique_fields:
-                is_field_unique = bus_station._meta.get_field(field).unique
-
-                self.assertTrue(is_field_unique)
+        super().test_max_lengths(BusStation)
 
     def test_help_texts(self):
         """Test help_text parameter for fields of BusStation instances"""
 
-        for bus_station in BusStation.objects.all():
-            for field, expected_help_text in self.fields_and_help_texts.items():
-                real_help_text = bus_station._meta.get_field(field).help_text
+        super().test_help_texts(BusStation)
 
-                self.assertEqual(real_help_text, expected_help_text)
+    def test_unique_fields(self):
+        """Test BusStation instances for uniqueness"""
+
+        super().test_unique_fields(BusStation)
 
     def test_instance_string_display(self):
         """Test string display of BusStation instance"""
 
         for bus_station in BusStation.objects.all():
-            instance_string_display = str(bus_station)
-
-            self.assertEqual(instance_string_display, bus_station.name)
+            super().test_instance_string_display(bus_station, bus_station.name)
 
     def test_model_verbose_name(self):
         """Test verbose_name of BusStation model"""
 
-        real_model_verbose_name = BusStation._meta.verbose_name.title()
-
-        self.assertEqual(real_model_verbose_name, self.model_verbose_name)
+        super().test_model_verbose_name(BusStation)
 
     def test_model_verbose_name_plural(self):
         """Test verbose_name_plural of BusStation model"""
 
-        real_model_verbose_name_plural = \
-            BusStation._meta.verbose_name_plural.title()
-
-        self.assertEqual(
-            real_model_verbose_name_plural,
-            self.model_verbose_name_plural
-        )
+        super().test_model_verbose_name_plural(BusStation)
 
     def test_model_ordering(self):
         """Test ordering of BusStation model"""
 
-        real_model_ordering = BusStation._meta.ordering
-
-        self.assertEqual(real_model_ordering, self.model_ordering)
+        super().test_model_ordering(BusStation)
 
 
-class RouteTests(TestCase):
+class RouteTests(
+        TestCase, TestVerboseNameslMixin, TestMaxLengthsMixin,
+        TestHelpTextsMixin, TestModelVerboseNameMixin,
+        TestModelVerboseNamePluralMixin, TestModeOrderingMixin,
+        TestInstanceStringDisplayMixin
+    ):
     """Test class for Route model"""
 
     def setUp(self):
@@ -171,77 +298,49 @@ class RouteTests(TestCase):
 
     def test_verbose_names(self):
         """Test verbose_name parameter for fields of Route instances"""
-
-        for route in Route.objects.all():
-            for field, expected_verbose_name in self.fields_and_verbose_names.items():
-                real_verbose_name = route._meta.get_field(field).verbose_name
-
-                self.assertEqual(real_verbose_name, expected_verbose_name)
+            
+        super().test_verbose_names(Route)
 
     def test_max_lengths(self):
         """Test max_length parameter for fields of Route instances"""
 
-        for route in Route.objects.all():
-            for field, expected_max_length in self.fields_and_max_lengths.items():
-                real_max_length = route._meta.get_field(field).max_length
-
-                self.assertEqual(real_max_length, expected_max_length)
+        super().test_max_lengths(Route)
 
     def test_help_texts(self):
         """Test help_text parameter for fields of Route instances"""
 
-        for route in Route.objects.all():
-            for field, expected_help_text in self.fields_and_help_texts.items():
-                real_help_text = route._meta.get_field(field).help_text
-
-                self.assertEqual(real_help_text, expected_help_text)
+        super().test_help_texts(Route)
 
     def test_instance_string_display(self):
         """Test string display of Route instance"""
 
         for route in Route.objects.all():
-            real_string_display = str(route)
-            expected_string_display = str(route.bus_station) + ' - ' \
-                + str(route.name)
-
-            self.assertEqual(
-                real_string_display,
-                expected_string_display
+            super().test_instance_string_display(
+                route,
+                str(route.bus_station) + ' - ' + str(route.name)
             )
 
     def test_model_verbose_name(self):
         """Test verbose_name of Route model"""
 
-        real_model_verbose_name = Route._meta.verbose_name.title()
-
-        self.assertEqual(
-            real_model_verbose_name,
-            self.model_verbose_name
-        )
+        super().test_model_verbose_name(Route)
 
     def test_model_verbose_name_plural(self):
         """Test verbose_name_plural of Route model"""
 
-        real_model_verbose_name_plural = \
-            Route._meta.verbose_name_plural.title()
-
-        self.assertEqual(
-            real_model_verbose_name_plural,
-            self.model_verbose_name_plural
-        )
+        super().test_model_verbose_name_plural(Route)
 
     def test_model_ordering(self):
         """Test ordering of Route model"""
 
-        real_model_ordering = Route._meta.ordering
-
-        self.assertEqual(
-            real_model_ordering,
-            self.model_ordering
-        )
+        super().test_model_ordering(Route)
 
 
-class FlightTests(TestCase):
+class FlightTests(
+        TestCase, TestVerboseNameslMixin, TestModelVerboseNameMixin,
+        TestModelVerboseNamePluralMixin, TestModeOrderingMixin,
+        TestInstanceStringDisplayMixin, TestDefaultValuesMixin
+    ):
     """Test class for Flight model"""
 
     def setUp(self):
@@ -307,61 +406,43 @@ class FlightTests(TestCase):
     def test_verbose_names(self):
         """Test verbose_name parameter for fields of Flight instances"""
 
-        for flight in Flight.objects.all():
-            for field, expected_verbose_name in self.fields_and_verbose_names.items():
-                real_verbose_name = flight._meta.get_field(field).verbose_name
-
-                self.assertEqual(real_verbose_name, expected_verbose_name)
+        super().test_verbose_names(Flight)
 
     def test_default_values(self):
         """Test default parameter for fields of Flight instances"""
 
-        for flight in Flight.objects.all():
-            for field, expected_default_value in self.fields_and_default_values.items():
-                real_default_value = flight._meta.get_field(field).default
-
-                self.assertEqual(real_default_value, expected_default_value)
+        super().test_default_values(Flight)
 
     def test_instance_string_display(self):
         """Test string display of Flight instance"""
 
         for flight in Flight.objects.all():
-            real_string_display = str(flight)
-            expected_string_display = str(flight.route) + ' - ' \
-                + str(flight.departure_time)
-
-            self.assertEqual(real_string_display, expected_string_display)
+            super().test_instance_string_display(
+                flight,
+                str(flight.route) + ' - ' + str(flight.departure_time)
+            )
 
     def test_model_verbose_name(self):
         """Test verbose_name of Flight model"""
 
-        real_model_verbose_name = Flight._meta.verbose_name.title()
-
-        self.assertEqual(real_model_verbose_name, self.model_verbose_name)
+        super().test_model_verbose_name(Flight)
 
     def test_model_verbose_name_plural(self):
         """Test verbose_name_plural of Flight model"""
 
-        real_model_verbose_name_plural = \
-            Flight._meta.verbose_name_plural.title()
-
-        self.assertEqual(
-            real_model_verbose_name_plural,
-            self.model_verbose_name_plural
-        )
+        super().test_model_verbose_name_plural(Flight)
 
     def test_model_ordering(self):
         """Test ordering of Flight model"""
 
-        real_model_ordering = Flight._meta.ordering
-
-        self.assertEqual(
-            real_model_ordering,
-            self.model_ordering
-        )
+        super().test_model_ordering(Flight)
 
 
-class BusTests(TestCase):
+class BusTests(
+        TestCase, TestVerboseNameslMixin, TestMaxLengthsMixin,
+        TestModelVerboseNameMixin, TestModelVerboseNamePluralMixin,
+        TestModeOrderingMixin, TestInstanceStringDisplayMixin
+    ):
     """Test class for Bus model"""
 
     def setUp(self):
@@ -404,66 +485,44 @@ class BusTests(TestCase):
     def test_verbose_names(self):
         """Test verbose_name parameter for fields of Bus instances"""
 
-        for bus in Bus.objects.all():
-            for field, expected_verbose_name in self.fields_and_verbose_names.items():
-                real_verbose_name = bus._meta.get_field(field).verbose_name
-
-                self.assertEqual(real_verbose_name, expected_verbose_name)
+        super().test_verbose_names(Bus)
 
     def test_max_lengths(self):
         """Test max_length parameter for fields of BUs instances"""
 
-        for bus in Bus.objects.all():
-            for field, expected_max_length in self.fields_and_max_lengths.items():
-                real_max_length = bus._meta.get_field(field).max_length
-
-                self.assertEqual(real_max_length, expected_max_length)
+        super().test_max_lengths(Bus)
 
     def test_instance_string_display(self):
         """Test string display of Bus instance"""
 
         for bus in Bus.objects.all():
-            real_string_display = str(bus)
-            expected_string_display = f'{bus.mark} {bus.registration_number}'
-
-            self.assertEqual(
-                real_string_display,
-                expected_string_display
+            super().test_instance_string_display(
+                bus,
+                f'{bus.mark} {bus.registration_number}'
             )
 
     def test_model_verbose_name(self):
         """Test verbose_name of Bus model"""
 
-        real_model_verbose_name = Bus._meta.verbose_name.title()
-
-        self.assertEqual(
-            real_model_verbose_name,
-            self.model_verbose_name
-        )
+        super().test_model_verbose_name(Bus)
 
     def test_model_verbose_name_plural(self):
         """Test verbose_name_plural of Bus model"""
 
-        real_model_verbose_name_plural = \
-            Bus._meta.verbose_name_plural.title()
-
-        self.assertEqual(
-            real_model_verbose_name_plural,
-            self.model_verbose_name_plural
-        )
+        super().test_model_verbose_name_plural(Bus)
 
     def test_model_ordering(self):
         """Test ordering of Bus model"""
 
-        real_model_ordering = Bus._meta.ordering
-
-        self.assertEqual(
-            real_model_ordering,
-            self.model_ordering
-        )
+        super().test_model_ordering(Bus)
 
 
-class DriverTests(TestCase):
+class DriverTests(
+        TestCase, TestVerboseNameslMixin, TestMaxLengthsMixin,
+        TestModelVerboseNameMixin, TestModelVerboseNamePluralMixin,
+        TestModeOrderingMixin, TestInstanceStringDisplayMixin,
+        TestUniqueFieldsMixin, TestValidatorsMixin
+    ):
     """Test class for Driver model"""
 
     def setUp(self):
@@ -508,82 +567,57 @@ class DriverTests(TestCase):
 
     def test_verbose_names(self):
         """Test verbose_name parameter for fields of Driver instances"""
-
-        for driver in Driver.objects.all():
-            for field, expected_verbose_name in self.fields_and_verbose_names.items():
-                real_verbose_name = driver._meta.get_field(field).verbose_name
-
-                self.assertEqual(real_verbose_name, expected_verbose_name)
+        
+        super().test_verbose_names(Driver)
 
     def test_max_lengths(self):
         """Test max_length parameter for fields of Driver instances"""
 
-        for driver in Driver.objects.all():
-            for field, expected_max_length in self.fields_and_max_lengths.items():
-                real_max_length = driver._meta.get_field(field).max_length
-
-                self.assertEqual(real_max_length, expected_max_length)
+        super().test_max_lengths(Driver)
 
     def test_unique_fields(self):
         """Test Driver instances for uniqueness"""
 
-        for driver in Driver.objects.all():
-            for field in self.unique_fields:
-                is_field_unique = driver._meta.get_field(field).unique
-
-                self.assertTrue(is_field_unique)
+        super().test_unique_fields(Driver)
 
     def test_validators(self):
         """Test validators parameter for fields of Driver instances"""
 
-        for driver in Driver.objects.all():
-            for field, expected_validators in self.fields_and_validators.items():
-                real_validators = driver._meta.get_field(field).validators
-
-                self.assertEqual(real_validators, expected_validators)
+        super().test_validators(Driver)
 
     def test_instance_string_display(self):
         """Test string display of Driver instance"""
 
         for driver in Driver.objects.all():
-            real_string_display = str(driver)
-            expected_string_display = str(driver.second_name) + " " + \
-                str(driver.name[0]) + "." + \
+            super().test_instance_string_display(
+                driver,
+                str(driver.second_name) + " " + str(driver.name[0]) + "." + \
                 str(driver.middle_name[0]) + ". - " + \
                 str(driver.passport_number)
-
-            self.assertEqual(
-                real_string_display,
-                expected_string_display
             )
 
     def test_model_verbose_name(self):
         """Test verbose_name of Driver model"""
 
-        real_model_verbose_name = Driver._meta.verbose_name.title()
-
-        self.assertEqual(real_model_verbose_name, self.model_verbose_name)
+        super().test_model_verbose_name(Driver)
 
     def test_model_verbose_name_plural(self):
         """Test verbose_name_plural of Driver model"""
 
-        real_model_verbose_name_plural = \
-            Driver._meta.verbose_name_plural.title()
-
-        self.assertEqual(
-            real_model_verbose_name_plural,
-            self.model_verbose_name_plural
-        )
+        super().test_model_verbose_name_plural(Driver)
 
     def test_model_ordering(self):
         """Test ordering of Driver model"""
 
-        real_model_ordering = Driver._meta.ordering
-
-        self.assertEqual(real_model_ordering, self.model_ordering)
+        super().test_model_ordering(Driver)
 
 
-class TicketTests(TestCase):
+class TicketTests(
+        TestCase, TestVerboseNameslMixin, TestMaxLengthsMixin,
+        TestModelVerboseNameMixin, TestModelVerboseNamePluralMixin,
+        TestModeOrderingMixin, TestInstanceStringDisplayMixin,
+        TestModelGetLatestByMixin
+    ):
     """Test class for Ticket model"""
 
     def setUp(self):
@@ -656,59 +690,39 @@ class TicketTests(TestCase):
     def test_verbose_names(self):
         """Test verbose_name parameter for fields of Ticket instances"""
 
-        for ticket in Ticket.objects.all():
-            for field, expected_verbose_name in self.fields_and_verbose_names.items():
-                real_verbose_name = ticket._meta.get_field(field).verbose_name
-
-                self.assertEqual(real_verbose_name, expected_verbose_name)
+        super().test_verbose_names(Ticket)
 
     def test_max_lengths(self):
         """Test max_length parameter for fields of Ticket instances"""
 
-        for ticket in Ticket.objects.all():
-            for field, expected_max_length in self.fields_and_max_lengths.items():
-                real_max_length = ticket._meta.get_field(field).max_length
-
-                self.assertEqual(real_max_length, expected_max_length)
+        super().test_max_lengths(Ticket)
 
     def test_instance_string_display(self):
         """Test string display of Ticket instance"""
 
         for ticket in Ticket.objects.all():
-            real_string_display = str(ticket)
-            expected_string_display = str(ticket.flight) + \
-                " - " + str(ticket.user)
-
-            self.assertEqual(real_string_display, expected_string_display)
+            super().test_instance_string_display(
+                ticket,
+                str(ticket.flight) + " - " + str(ticket.user)
+            )
 
     def test_model_verbose_name(self):
         """Test verbose_name of Ticket model"""
 
-        real_model_verbose_name = Ticket._meta.verbose_name.title()
-
-        self.assertEqual(real_model_verbose_name, self.model_verbose_name)
+        super().test_model_verbose_name(Ticket)
 
     def test_model_verbose_name_plural(self):
         """Test verbose_name_plural of Ticket model"""
 
-        real_model_verbose_name_plural = \
-            Ticket._meta.verbose_name_plural.title()
-
-        self.assertEqual(
-            real_model_verbose_name_plural,
-            self.model_verbose_name_plural
-        )
+        super().test_model_verbose_name_plural(Ticket)
 
     def test_model_ordering(self):
         """Test ordering of Ticket model"""
 
-        real_model_ordering = Ticket._meta.ordering
-
-        self.assertEqual(real_model_ordering, self.model_ordering)
+        super().test_model_ordering(Ticket)
 
     def test_model_get_latest_by(self):
         """Test get_latest_by of Ticket model"""
 
-        real_model_get_latest_by = Ticket._meta.get_latest_by
-
-        self.assertEqual(real_model_get_latest_by, self.model_get_latest_by)
+        super().test_model_get_latest_by(Ticket)
+# 715
