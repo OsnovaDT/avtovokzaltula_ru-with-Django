@@ -44,27 +44,27 @@ class BusStationTests(TestCase):
             'office_hours': 'Часы работы через точку с запятой',
         }
 
-        self.bus_station_model_verbose_name = 'Автовокзал'
-        self.bus_station_model_verbose_name_plural = 'Автовокзалы'
-        self.bus_station_model_ordering = ['name']
+        self.model_verbose_name = 'Автовокзал'
+        self.model_verbose_name_plural = 'Автовокзалы'
+        self.model_ordering = ['name']
 
     def test_verbose_names(self):
         """Test verbose_name parameter for fields of BusStation instances"""
 
         for bus_station in BusStation.objects.all():
-            for field, correct_verbose_name in self.fields_and_verbose_names.items():
-                field_verbose_name = bus_station._meta.get_field(field).verbose_name
+            for field, expected_verbose_name in self.fields_and_verbose_names.items():
+                real_verbose_name = bus_station._meta.get_field(field).verbose_name
 
-                self.assertEqual(field_verbose_name, correct_verbose_name)
+                self.assertEqual(real_verbose_name, expected_verbose_name)
 
     def test_max_lengths(self):
         """Test max_length parameter for fields of BusStation instances"""
 
         for bus_station in BusStation.objects.all():
-            for field, correct_max_length in self.fields_and_max_lengths.items():
-                field_max_length = bus_station._meta.get_field(field).max_length
+            for field, expected_max_length in self.fields_and_max_lengths.items():
+                real_max_length = bus_station._meta.get_field(field).max_length
 
-                self.assertEqual(field_max_length, correct_max_length)
+                self.assertEqual(real_max_length, expected_max_length)
 
     def test_unique_fields(self):
         """Test BusStation instances for uniqueness"""
@@ -79,49 +79,43 @@ class BusStationTests(TestCase):
         """Test help_text parameter for fields of BusStation instances"""
 
         for bus_station in BusStation.objects.all():
-            for field, correct_help_text in self.fields_and_help_texts.items():
-                field_help_text = bus_station._meta.get_field(field).help_text
+            for field, expected_help_text in self.fields_and_help_texts.items():
+                real_help_text = bus_station._meta.get_field(field).help_text
 
-                self.assertEqual(field_help_text, correct_help_text)
+                self.assertEqual(real_help_text, expected_help_text)
 
     def test_instance_string_display(self):
         """Test string display of BusStation instance"""
 
         for bus_station in BusStation.objects.all():
-            bus_station_string_display = str(bus_station)
+            instance_string_display = str(bus_station)
 
-            self.assertEqual(bus_station_string_display, bus_station.name)
+            self.assertEqual(instance_string_display, bus_station.name)
 
     def test_model_verbose_name(self):
         """Test verbose_name of BusStation model"""
 
-        bus_station_model_verbose_name = BusStation._meta.verbose_name.title()
+        real_model_verbose_name = BusStation._meta.verbose_name.title()
 
-        self.assertEqual(
-            bus_station_model_verbose_name,
-            self.bus_station_model_verbose_name
-        )
+        self.assertEqual(real_model_verbose_name, self.model_verbose_name)
 
     def test_model_verbose_name_plural(self):
         """Test verbose_name_plural of BusStation model"""
 
-        bus_station_model_verbose_name_plural = \
+        real_model_verbose_name_plural = \
             BusStation._meta.verbose_name_plural.title()
 
         self.assertEqual(
-            bus_station_model_verbose_name_plural,
-            self.bus_station_model_verbose_name_plural
+            real_model_verbose_name_plural,
+            self.model_verbose_name_plural
         )
 
     def test_model_ordering(self):
         """Test ordering of BusStation model"""
 
-        bus_station_model_ordering = BusStation._meta.ordering
+        real_model_ordering = BusStation._meta.ordering
 
-        self.assertEqual(
-            bus_station_model_ordering,
-            self.bus_station_model_ordering
-        )
+        self.assertEqual(real_model_ordering, self.model_ordering)
 
 
 class RouteTests(TestCase):
