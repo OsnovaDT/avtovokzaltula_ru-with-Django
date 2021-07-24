@@ -55,7 +55,7 @@ class BusStationTests(TestCase):
 
                 self.assertEqual(field_verbose_name, correct_verbose_name)
 
-    def test_max_length(self):
+    def test_max_lengths(self):
         """Test max_length parameter for fields of BusStation instances"""
 
         for bus_station in BusStation.objects.all():
@@ -90,7 +90,7 @@ class BusStationTests(TestCase):
 
             self.assertEqual(bus_station_string_display, bus_station.name)
 
-    def test_bus_station_model_verbose_name(self):
+    def test_model_verbose_name(self):
         """Test verbose_name of BusStation model"""
 
         bus_station_model_verbose_name = BusStation._meta.verbose_name.title()
@@ -100,7 +100,7 @@ class BusStationTests(TestCase):
             self.bus_station_model_verbose_name
         )
 
-    def test_bus_station_model_verbose_name_plural(self):
+    def test_model_verbose_name_plural(self):
         """Test verbose_name_plural of BusStation model"""
 
         bus_station_model_verbose_name_plural = \
@@ -111,7 +111,7 @@ class BusStationTests(TestCase):
             self.bus_station_model_verbose_name_plural
         )
 
-    def test_bus_station_model_ordering(self):
+    def test_model_ordering(self):
         """Test ordering of BusStation model"""
 
         bus_station_model_ordering = BusStation._meta.ordering
