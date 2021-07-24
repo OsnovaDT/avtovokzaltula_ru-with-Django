@@ -249,14 +249,6 @@ class FlightTests(TestCase):
             phone_number=f'8-666-666-69-69'
         )
 
-        # test_route = Route.objects.create(
-        #     name=f'Маршрут №1',
-        #     regularity='Пн;Ср',
-        #     departure_time='10:00; 22:00',
-        #     price=300,
-        #     bus_station=test_bus_station
-        # )
-
         test_driver = Driver.objects.create(
             passport_number='1234 12345678',
             name='Семён',
