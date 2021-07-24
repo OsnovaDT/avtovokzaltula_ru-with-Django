@@ -16,7 +16,7 @@ TEST_INSTANCES_AMOUNT = 20
 # Mixins
 
 
-class TestVerboseNameslMixin():
+class TestVerboseNamesMixin():
     """Mixin with function for testing verbose_names"""
 
     def test_verbose_names(self, model):
@@ -55,44 +55,45 @@ class TestHelpTextsMixin():
                 self.assertEqual(real_help_text, expected_help_text)
 
 
-class TestModelVerboseNameMixin():
-    """Mixin with function for testing model verbose_name"""
+class TestVerboseNameOfModelMixin():
+    """Mixin with function for testing verbose_name of model"""
 
-    def test_model_verbose_name(self, model):
+    def test_verbose_name_of_model(self, model):
         """Test verbose_name of the model"""
 
         real_model_verbose_name = model._meta.verbose_name.title()
+        expected_model_verbose_name = self.model_verbose_name
 
-        self.assertEqual(real_model_verbose_name, self.model_verbose_name)
+        self.assertEqual(real_model_verbose_name, expected_model_verbose_name)
 
 
-class TestModelVerboseNamePluralMixin():
-    """Mixin with function for testing model verbose_name_plural"""
+class TestVerboseNamePluralOfModelMixin():
+    """Mixin with function for testing verbose_name_plural of model"""
 
-    def test_model_verbose_name_plural(self, model):
+    def test_verbose_name_plural_of_model(self, model):
         """Test verbose_name_plural of the model"""
 
         real_model_verbose_name_plural = \
             model._meta.verbose_name_plural.title()
 
+        expected_model_verbose_name_plural = self.model_verbose_name_plural
+
         self.assertEqual(
             real_model_verbose_name_plural,
-            self.model_verbose_name_plural
+            expected_model_verbose_name_plural
         )
 
 
-class TestModeOrderingMixin():
-    """Mixin with function for testing model ordering"""
+class TestOrderingOfModelMixin():
+    """Mixin with function for testing ordering of model"""
 
-    def test_model_ordering(self, model):
+    def test_ordering_of_model(self, model):
         """Test ordering of the model"""
 
         real_model_ordering = model._meta.ordering
+        expected_model_ordering = self.model_ordering
 
-        self.assertEqual(
-            real_model_ordering,
-            self.model_ordering
-        )
+        self.assertEqual(real_model_ordering, expected_model_ordering)
 
 
 class TestInstanceStringDisplayMixin():
@@ -123,7 +124,7 @@ class TestValidatorsMixin():
     """Mixin with function for testing validators"""
 
     def test_validators(self, model):
-        """Test validators parameter for fields of Driver instances"""
+        """Test validators parameter for fields of model instances"""
 
         for instance in model.objects.all():
             for field, expected_validators in self.fields_and_validators.items():
@@ -145,10 +146,10 @@ class TestDefaultValuesMixin():
                 self.assertEqual(real_default_value, expected_default_value)
 
 
-class TestModelGetLatestByMixin():
-    """Mixin with function for testing model get_latest_by"""
+class TestGetLatestByOfModelMixin():
+    """Mixin with function for testing get_latest_by of model"""
 
-    def test_model_get_latest_by(self, model):
+    def test_get_latest_by_of_model(self, model):
         """Test get_latest_by of the model"""
 
         real_model_get_latest_by = model._meta.get_latest_by
@@ -160,9 +161,9 @@ class TestModelGetLatestByMixin():
 
 
 class BusStationTests(
-        TestCase, TestVerboseNameslMixin, TestMaxLengthsMixin,
-        TestHelpTextsMixin, TestModelVerboseNameMixin,
-        TestModelVerboseNamePluralMixin, TestModeOrderingMixin,
+        TestCase, TestVerboseNamesMixin, TestMaxLengthsMixin,
+        TestHelpTextsMixin, TestVerboseNameOfModelMixin,
+        TestVerboseNamePluralOfModelMixin, TestOrderingOfModelMixin,
         TestInstanceStringDisplayMixin, TestUniqueFieldsMixin
     ):
     """Test class for BusStation model"""
@@ -228,26 +229,26 @@ class BusStationTests(
         for bus_station in BusStation.objects.all():
             super().test_instance_string_display(bus_station, bus_station.name)
 
-    def test_model_verbose_name(self):
+    def test_verbose_name_of_model(self):
         """Test verbose_name of BusStation model"""
 
-        super().test_model_verbose_name(BusStation)
+        super().test_verbose_name_of_model(BusStation)
 
-    def test_model_verbose_name_plural(self):
+    def test_verbose_name_plural_of_model(self):
         """Test verbose_name_plural of BusStation model"""
 
-        super().test_model_verbose_name_plural(BusStation)
+        super().test_verbose_name_plural_of_model(BusStation)
 
-    def test_model_ordering(self):
+    def test_ordering_of_model(self):
         """Test ordering of BusStation model"""
 
-        super().test_model_ordering(BusStation)
+        super().test_ordering_of_model(BusStation)
 
 
 class RouteTests(
-        TestCase, TestVerboseNameslMixin, TestMaxLengthsMixin,
-        TestHelpTextsMixin, TestModelVerboseNameMixin,
-        TestModelVerboseNamePluralMixin, TestModeOrderingMixin,
+        TestCase, TestVerboseNamesMixin, TestMaxLengthsMixin,
+        TestHelpTextsMixin, TestVerboseNameOfModelMixin,
+        TestVerboseNamePluralOfModelMixin, TestOrderingOfModelMixin,
         TestInstanceStringDisplayMixin
     ):
     """Test class for Route model"""
@@ -320,25 +321,25 @@ class RouteTests(
                 str(route.bus_station) + ' - ' + str(route.name)
             )
 
-    def test_model_verbose_name(self):
+    def test_verbose_name_of_model(self):
         """Test verbose_name of Route model"""
 
-        super().test_model_verbose_name(Route)
+        super().test_verbose_name_of_model(Route)
 
-    def test_model_verbose_name_plural(self):
+    def test_verbose_name_plural_of_model(self):
         """Test verbose_name_plural of Route model"""
 
-        super().test_model_verbose_name_plural(Route)
+        super().test_verbose_name_plural_of_model(Route)
 
-    def test_model_ordering(self):
+    def test_ordering_of_model(self):
         """Test ordering of Route model"""
 
-        super().test_model_ordering(Route)
+        super().test_ordering_of_model(Route)
 
 
 class FlightTests(
-        TestCase, TestVerboseNameslMixin, TestModelVerboseNameMixin,
-        TestModelVerboseNamePluralMixin, TestModeOrderingMixin,
+        TestCase, TestVerboseNamesMixin, TestVerboseNameOfModelMixin,
+        TestVerboseNamePluralOfModelMixin, TestOrderingOfModelMixin,
         TestInstanceStringDisplayMixin, TestDefaultValuesMixin
     ):
     """Test class for Flight model"""
@@ -422,26 +423,26 @@ class FlightTests(
                 str(flight.route) + ' - ' + str(flight.departure_time)
             )
 
-    def test_model_verbose_name(self):
+    def test_verbose_name_of_model(self):
         """Test verbose_name of Flight model"""
 
-        super().test_model_verbose_name(Flight)
+        super().test_verbose_name_of_model(Flight)
 
-    def test_model_verbose_name_plural(self):
+    def test_verbose_name_plural_of_model(self):
         """Test verbose_name_plural of Flight model"""
 
-        super().test_model_verbose_name_plural(Flight)
+        super().test_verbose_name_plural_of_model(Flight)
 
-    def test_model_ordering(self):
+    def test_ordering_of_model(self):
         """Test ordering of Flight model"""
 
-        super().test_model_ordering(Flight)
+        super().test_ordering_of_model(Flight)
 
 
 class BusTests(
-        TestCase, TestVerboseNameslMixin, TestMaxLengthsMixin,
-        TestModelVerboseNameMixin, TestModelVerboseNamePluralMixin,
-        TestModeOrderingMixin, TestInstanceStringDisplayMixin
+        TestCase, TestVerboseNamesMixin, TestMaxLengthsMixin,
+        TestVerboseNameOfModelMixin, TestVerboseNamePluralOfModelMixin,
+        TestOrderingOfModelMixin, TestInstanceStringDisplayMixin
     ):
     """Test class for Bus model"""
 
@@ -501,26 +502,26 @@ class BusTests(
                 f'{bus.mark} {bus.registration_number}'
             )
 
-    def test_model_verbose_name(self):
+    def test_verbose_name_of_model(self):
         """Test verbose_name of Bus model"""
 
-        super().test_model_verbose_name(Bus)
+        super().test_verbose_name_of_model(Bus)
 
-    def test_model_verbose_name_plural(self):
+    def test_verbose_name_plural_of_model(self):
         """Test verbose_name_plural of Bus model"""
 
-        super().test_model_verbose_name_plural(Bus)
+        super().test_verbose_name_plural_of_model(Bus)
 
-    def test_model_ordering(self):
+    def test_ordering_of_model(self):
         """Test ordering of Bus model"""
 
-        super().test_model_ordering(Bus)
+        super().test_ordering_of_model(Bus)
 
 
 class DriverTests(
-        TestCase, TestVerboseNameslMixin, TestMaxLengthsMixin,
-        TestModelVerboseNameMixin, TestModelVerboseNamePluralMixin,
-        TestModeOrderingMixin, TestInstanceStringDisplayMixin,
+        TestCase, TestVerboseNamesMixin, TestMaxLengthsMixin,
+        TestVerboseNameOfModelMixin, TestVerboseNamePluralOfModelMixin,
+        TestOrderingOfModelMixin, TestInstanceStringDisplayMixin,
         TestUniqueFieldsMixin, TestValidatorsMixin
     ):
     """Test class for Driver model"""
@@ -596,27 +597,27 @@ class DriverTests(
                 str(driver.passport_number)
             )
 
-    def test_model_verbose_name(self):
+    def test_verbose_name_of_model(self):
         """Test verbose_name of Driver model"""
 
-        super().test_model_verbose_name(Driver)
+        super().test_verbose_name_of_model(Driver)
 
-    def test_model_verbose_name_plural(self):
+    def test_verbose_name_plural_of_model(self):
         """Test verbose_name_plural of Driver model"""
 
-        super().test_model_verbose_name_plural(Driver)
+        super().test_verbose_name_plural_of_model(Driver)
 
-    def test_model_ordering(self):
+    def test_ordering_of_model(self):
         """Test ordering of Driver model"""
 
-        super().test_model_ordering(Driver)
+        super().test_ordering_of_model(Driver)
 
 
 class TicketTests(
-        TestCase, TestVerboseNameslMixin, TestMaxLengthsMixin,
-        TestModelVerboseNameMixin, TestModelVerboseNamePluralMixin,
-        TestModeOrderingMixin, TestInstanceStringDisplayMixin,
-        TestModelGetLatestByMixin
+        TestCase, TestVerboseNamesMixin, TestMaxLengthsMixin,
+        TestVerboseNameOfModelMixin, TestVerboseNamePluralOfModelMixin,
+        TestOrderingOfModelMixin, TestInstanceStringDisplayMixin,
+        TestGetLatestByOfModelMixin
     ):
     """Test class for Ticket model"""
 
@@ -706,23 +707,23 @@ class TicketTests(
                 str(ticket.flight) + " - " + str(ticket.user)
             )
 
-    def test_model_verbose_name(self):
+    def test_verbose_name_of_model(self):
         """Test verbose_name of Ticket model"""
 
-        super().test_model_verbose_name(Ticket)
+        super().test_verbose_name_of_model(Ticket)
 
-    def test_model_verbose_name_plural(self):
+    def test_verbose_name_plural_of_model(self):
         """Test verbose_name_plural of Ticket model"""
 
-        super().test_model_verbose_name_plural(Ticket)
+        super().test_verbose_name_plural_of_model(Ticket)
 
-    def test_model_ordering(self):
+    def test_ordering_of_model(self):
         """Test ordering of Ticket model"""
 
-        super().test_model_ordering(Ticket)
+        super().test_ordering_of_model(Ticket)
 
-    def test_model_get_latest_by(self):
+    def test_get_latest_by_of_model(self):
         """Test get_latest_by of Ticket model"""
 
-        super().test_model_get_latest_by(Ticket)
+        super().test_get_latest_by_of_model(Ticket)
 # 715
