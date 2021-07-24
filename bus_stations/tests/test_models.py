@@ -1,11 +1,13 @@
 """Test models for bus_stations folder"""
 
+from datetime import time
+
 from django.test import TestCase
 from django.core.validators import MinValueValidator
 
 from bus_stations.models import (
-    BusStation, Route, Flight, Bus,
-    Driver, Ticket
+    BusStation, Route, Flight,
+    Bus, Driver, Ticket
 )
 
 
@@ -579,3 +581,134 @@ class DriverTests(TestCase):
         real_model_ordering = Driver._meta.ordering
 
         self.assertEqual(real_model_ordering, self.model_ordering)
+
+
+class TicketTests(TestCase):
+    """Test class for Ticket model"""
+
+    def setUp(self):
+        for test_instance_index in range(TEST_INSTANCES_AMOUNT):
+            test_bus_station = BusStation.objects.create(
+                name=f'Автовокзал №{test_instance_index}',
+                office_hours='10:00 - 22:00',
+                address=f'г. Тула, ул. Такая-то, дом №{test_instance_index}',
+                phone_number=f'8-666-666-69-{test_instance_index}'
+            )
+
+            test_route = Route.objects.create(
+                name=f'Маршрут №{test_instance_index}',
+                regularity='Пн;Ср',
+                departure_time='10:00; 22:00',
+                price=300,
+                bus_station=test_bus_station
+            )
+
+            test_driver = Driver.objects.create(
+                passport_number=test_instance_index,
+                name='Евгений',
+                second_name='Иванов',
+                middle_name='Иванович',
+                phone_number=test_instance_index,
+                age=30
+            )
+
+            test_bus = Bus.objects.create(
+                registration_number=f'Е{test_instance_index}КХ',
+                mark='Ford',
+                amount_of_places='40',
+                driver=test_driver
+            )
+
+            test_flight = Flight.objects.create(
+                route=test_route,
+                departure_time='10:00',
+                arrival_time='22:00',
+                amount_of_free_places=30,
+                bus=test_bus
+            )
+
+            Ticket.objects.create(
+                flight=test_flight,
+                user='Евгений',
+                seller='Иван',
+                registration_time=time(12, 30),
+            )
+
+        # Correct data for Driver model
+
+        self.fields_and_verbose_names = {
+            'flight': 'Рейс',
+            'user': 'Покупатель',
+            'seller': 'Продавец',
+            'registration_time': 'Время оформления',
+        }
+
+        self.fields_and_max_lengths = {
+            'user': 255,
+            'seller': 255,
+        }
+
+        self.model_verbose_name = 'Билет'
+        self.model_verbose_name_plural = 'Билеты'
+        self.model_ordering = ['flight']
+        self.model_get_latest_by = 'registration_time'
+
+    def test_verbose_names(self):
+        """Test verbose_name parameter for fields of Ticket instances"""
+
+        for ticket in Ticket.objects.all():
+            for field, expected_verbose_name in self.fields_and_verbose_names.items():
+                real_verbose_name = ticket._meta.get_field(field).verbose_name
+
+                self.assertEqual(real_verbose_name, expected_verbose_name)
+
+    def test_max_lengths(self):
+        """Test max_length parameter for fields of Ticket instances"""
+
+        for ticket in Ticket.objects.all():
+            for field, expected_max_length in self.fields_and_max_lengths.items():
+                real_max_length = ticket._meta.get_field(field).max_length
+
+                self.assertEqual(real_max_length, expected_max_length)
+
+    def test_instance_string_display(self):
+        """Test string display of Ticket instance"""
+
+        for ticket in Ticket.objects.all():
+            real_string_display = str(ticket)
+            expected_string_display = str(ticket.flight) + \
+                " - " + str(ticket.user)
+
+            self.assertEqual(real_string_display, expected_string_display)
+
+    def test_model_verbose_name(self):
+        """Test verbose_name of Ticket model"""
+
+        real_model_verbose_name = Ticket._meta.verbose_name.title()
+
+        self.assertEqual(real_model_verbose_name, self.model_verbose_name)
+
+    def test_model_verbose_name_plural(self):
+        """Test verbose_name_plural of Ticket model"""
+
+        real_model_verbose_name_plural = \
+            Ticket._meta.verbose_name_plural.title()
+
+        self.assertEqual(
+            real_model_verbose_name_plural,
+            self.model_verbose_name_plural
+        )
+
+    def test_model_ordering(self):
+        """Test ordering of Ticket model"""
+
+        real_model_ordering = Ticket._meta.ordering
+
+        self.assertEqual(real_model_ordering, self.model_ordering)
+
+    def test_model_get_latest_by(self):
+        """Test get_latest_by of Ticket model"""
+
+        real_model_get_latest_by = Ticket._meta.get_latest_by
+
+        self.assertEqual(real_model_get_latest_by, self.model_get_latest_by)
