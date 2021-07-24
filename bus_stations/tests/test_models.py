@@ -1,4 +1,4 @@
-"""Test models for bus_stations folder"""
+"""Tests for models from bus_stations folder"""
 
 from datetime import time
 
@@ -6,8 +6,7 @@ from django.test import TestCase
 from django.core.validators import MinValueValidator
 
 from bus_stations.models import (
-    BusStation, Route, Flight,
-    Bus, Driver, Ticket
+    BusStation, Route, Flight, Bus, Driver, Ticket
 )
 
 
@@ -269,7 +268,7 @@ class RouteTests(
                 name=f'Маршрут №{test_instance_index}',
                 regularity='Пн;Ср',
                 departure_time='10:00; 22:00',
-                price=300,
+                price=200 + test_instance_index,
                 bus_station=test_bus_station
             )
 
@@ -376,17 +375,17 @@ class FlightTests(
         for test_instance_index in range(TEST_INSTANCES_AMOUNT):
             Route.objects.create(
                 id=test_instance_index,
-                name='Маршрут №1',
+                name=f'Маршрут №{test_instance_index}',
                 regularity='Пн;Ср',
                 departure_time='10:00; 22:00',
-                price=300,
+                price=200 + test_instance_index,
                 bus_station=test_bus_station
             )
             Flight.objects.create(
                 route=Route.objects.get(id=test_instance_index),
                 departure_time='10:00',
                 arrival_time='22:00',
-                amount_of_free_places=30,
+                amount_of_free_places=20 + test_instance_index,
                 bus=test_bus
             )
 
@@ -461,12 +460,12 @@ class BusTests(
                 second_name='Семёнов',
                 middle_name='Семёнович',
                 phone_number=test_instance_index,
-                age=50
+                age=20 + test_instance_index
             )
             Bus.objects.create(
                 registration_number=f'Е{test_instance_index}КХ',
                 mark='Ford',
-                amount_of_places='40',
+                amount_of_places=20 + test_instance_index,
                 driver=test_driver
             )
 
@@ -542,7 +541,7 @@ class DriverTests(
                 second_name='Иванов',
                 middle_name='Иванович',
                 phone_number=test_instance_index,
-                age=30
+                age=20 + test_instance_index
             )
 
         # Correct data for Driver model
@@ -643,23 +642,23 @@ class TicketTests(
                 name=f'Маршрут №{test_instance_index}',
                 regularity='Пн;Ср',
                 departure_time='10:00; 22:00',
-                price=300,
+                price=200 + test_instance_index,
                 bus_station=test_bus_station
             )
 
             test_driver = Driver.objects.create(
-                passport_number=test_instance_index,
+                passport_number=f'1020 {test_instance_index}',
                 name='Евгений',
                 second_name='Иванов',
                 middle_name='Иванович',
                 phone_number=test_instance_index,
-                age=30
+                age=20 + test_instance_index
             )
 
             test_bus = Bus.objects.create(
                 registration_number=f'Е{test_instance_index}КХ',
                 mark='Ford',
-                amount_of_places='40',
+                amount_of_places=20 + test_instance_index,
                 driver=test_driver
             )
 
@@ -667,7 +666,7 @@ class TicketTests(
                 route=test_route,
                 departure_time='10:00',
                 arrival_time='22:00',
-                amount_of_free_places=30,
+                amount_of_free_places=20 + test_instance_index,
                 bus=test_bus
             )
 
@@ -678,7 +677,7 @@ class TicketTests(
                 registration_time=time(12, 30),
             )
 
-        # Correct data for Driver model
+        # Correct data for Ticket model
 
         self.fields_and_verbose_names = {
             'flight': 'Рейс',
