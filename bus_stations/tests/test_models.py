@@ -1,6 +1,7 @@
 """Test models for bus_stations folder"""
 
 from django.test import TestCase
+from django.core.validators import MinValueValidator
 
 from bus_stations.models import (
     BusStation, Route, Flight, Bus,
@@ -458,3 +459,123 @@ class BusTests(TestCase):
             real_model_ordering,
             self.model_ordering
         )
+
+
+class DriverTests(TestCase):
+    """Test class for Driver model"""
+
+    def setUp(self):
+        for test_instance_index in range(TEST_INSTANCES_AMOUNT):
+            Driver.objects.create(
+                passport_number=test_instance_index,
+                name='Евгений',
+                second_name='Иванов',
+                middle_name='Иванович',
+                phone_number=test_instance_index,
+                age=30
+            )
+
+        # Correct data for Driver model
+
+        self.fields_and_verbose_names = {
+            'passport_number': 'Номер паспорта',
+            'name': 'Имя',
+            'second_name': 'Фамилия',
+            'middle_name': 'Отчество',
+            'phone_number': 'Номер телефона',
+            'age': 'Возраст',
+        }
+
+        self.fields_and_max_lengths = {
+            'passport_number': 25,
+            'name': 255,
+            'second_name': 255,
+            'middle_name': 255,
+        }
+
+        self.fields_and_validators = {
+            'phone_number': [MinValueValidator(1)],
+            'age': [MinValueValidator(21)],
+        }
+
+        self.unique_fields = ['passport_number', 'phone_number']
+
+        self.model_verbose_name = 'Водитель'
+        self.model_verbose_name_plural = 'Водители'
+        self.model_ordering = ['name', 'second_name', 'middle_name']
+
+    def test_verbose_names(self):
+        """Test verbose_name parameter for fields of Driver instances"""
+
+        for driver in Driver.objects.all():
+            for field, expected_verbose_name in self.fields_and_verbose_names.items():
+                real_verbose_name = driver._meta.get_field(field).verbose_name
+
+                self.assertEqual(real_verbose_name, expected_verbose_name)
+
+    def test_max_lengths(self):
+        """Test max_length parameter for fields of Driver instances"""
+
+        for driver in Driver.objects.all():
+            for field, expected_max_length in self.fields_and_max_lengths.items():
+                real_max_length = driver._meta.get_field(field).max_length
+
+                self.assertEqual(real_max_length, expected_max_length)
+
+    def test_unique_fields(self):
+        """Test Driver instances for uniqueness"""
+
+        for driver in Driver.objects.all():
+            for field in self.unique_fields:
+                is_field_unique = driver._meta.get_field(field).unique
+
+                self.assertTrue(is_field_unique)
+
+    def test_validators(self):
+        """Test validators parameter for fields of Driver instances"""
+
+        for driver in Driver.objects.all():
+            for field, expected_validators in self.fields_and_validators.items():
+                real_validators = driver._meta.get_field(field).validators
+
+                self.assertEqual(real_validators, expected_validators)
+
+    def test_instance_string_display(self):
+        """Test string display of Driver instance"""
+
+        for driver in Driver.objects.all():
+            real_string_display = str(driver)
+            expected_string_display = str(driver.second_name) + " " + \
+                str(driver.name[0]) + "." + \
+                str(driver.middle_name[0]) + ". - " + \
+                str(driver.passport_number)
+
+            self.assertEqual(
+                real_string_display,
+                expected_string_display
+            )
+
+    def test_model_verbose_name(self):
+        """Test verbose_name of Driver model"""
+
+        real_model_verbose_name = Driver._meta.verbose_name.title()
+
+        self.assertEqual(real_model_verbose_name, self.model_verbose_name)
+
+    def test_model_verbose_name_plural(self):
+        """Test verbose_name_plural of Driver model"""
+
+        real_model_verbose_name_plural = \
+            Driver._meta.verbose_name_plural.title()
+
+        self.assertEqual(
+            real_model_verbose_name_plural,
+            self.model_verbose_name_plural
+        )
+
+    def test_model_ordering(self):
+        """Test ordering of Driver model"""
+
+        real_model_ordering = Driver._meta.ordering
+
+        self.assertEqual(real_model_ordering, self.model_ordering)
