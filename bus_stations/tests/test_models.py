@@ -356,3 +356,105 @@ class FlightTests(TestCase):
             real_model_ordering,
             self.model_ordering
         )
+
+
+class BusTests(TestCase):
+    """Test class for Bus model"""
+
+    def setUp(self):
+        for test_instance_index in range(TEST_INSTANCES_AMOUNT):
+            test_driver = Driver.objects.create(
+                passport_number=f'1234 {test_instance_index}',
+                name='Семён',
+                second_name='Семёнов',
+                middle_name='Семёнович',
+                phone_number=test_instance_index,
+                age=50
+            )
+            Bus.objects.create(
+                registration_number=f'Е{test_instance_index}КХ',
+                mark='Ford',
+                amount_of_places='40',
+                driver=test_driver
+            )
+
+        # Correct data for Bus model
+
+        self.fields_and_verbose_names = {
+            'registration_number': 'Регистрационный номер',
+            'mark': 'Марка',
+            'amount_of_places': 'Число мест',
+            'driver': 'Водитель',
+        }
+
+        self.fields_and_max_lengths = {
+            'registration_number': 10,
+            'mark': 100,
+        }
+
+        self.primary_key_field = 'registration_number'
+
+        self.model_verbose_name = 'Автобус'
+        self.model_verbose_name_plural = 'Автобусы'
+        self.model_ordering = ['mark']
+
+    def test_verbose_names(self):
+        """Test verbose_name parameter for fields of Bus instances"""
+
+        for bus in Bus.objects.all():
+            for field, expected_verbose_name in self.fields_and_verbose_names.items():
+                real_verbose_name = bus._meta.get_field(field).verbose_name
+
+                self.assertEqual(real_verbose_name, expected_verbose_name)
+
+    def test_max_lengths(self):
+        """Test max_length parameter for fields of BUs instances"""
+
+        for bus in Bus.objects.all():
+            for field, expected_max_length in self.fields_and_max_lengths.items():
+                real_max_length = bus._meta.get_field(field).max_length
+
+                self.assertEqual(real_max_length, expected_max_length)
+
+    def test_instance_string_display(self):
+        """Test string display of Bus instance"""
+
+        for bus in Bus.objects.all():
+            real_string_display = str(bus)
+            expected_string_display = f'{bus.mark} {bus.registration_number}'
+
+            self.assertEqual(
+                real_string_display,
+                expected_string_display
+            )
+
+    def test_model_verbose_name(self):
+        """Test verbose_name of Bus model"""
+
+        real_model_verbose_name = Bus._meta.verbose_name.title()
+
+        self.assertEqual(
+            real_model_verbose_name,
+            self.model_verbose_name
+        )
+
+    def test_model_verbose_name_plural(self):
+        """Test verbose_name_plural of Bus model"""
+
+        real_model_verbose_name_plural = \
+            Bus._meta.verbose_name_plural.title()
+
+        self.assertEqual(
+            real_model_verbose_name_plural,
+            self.model_verbose_name_plural
+        )
+
+    def test_model_ordering(self):
+        """Test ordering of Bus model"""
+
+        real_model_ordering = Bus._meta.ordering
+
+        self.assertEqual(
+            real_model_ordering,
+            self.model_ordering
+        )
