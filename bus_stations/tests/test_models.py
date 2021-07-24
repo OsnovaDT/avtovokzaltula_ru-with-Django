@@ -260,8 +260,8 @@ class RouteTests(
         test_bus_station = BusStation.objects.create(
             name='Автовокзал №1',
             office_hours='10:00 - 22:00',
-            address=f'г. Тула, ул. Такая-то, дом №1',
-            phone_number=f'8-666-666-69-69'
+            address='г. Тула, ул. Такая-то, дом №1',
+            phone_number='8-666-666-69-69'
         )
 
         for test_instance_index in range(TEST_INSTANCES_AMOUNT):
@@ -302,7 +302,7 @@ class RouteTests(
 
     def test_verbose_names(self):
         """Test verbose_name parameter for fields of Route instances"""
-            
+
         super().test_verbose_names(Route)
 
     def test_max_lengths(self):
@@ -353,8 +353,8 @@ class FlightTests(
         test_bus_station = BusStation.objects.create(
             name='Автовокзал №1',
             office_hours='10:00 - 22:00',
-            address=f'г. Тула, ул. Такая-то, дом №1',
-            phone_number=f'8-666-666-69-69'
+            address='г. Тула, ул. Такая-то, дом №1',
+            phone_number='8-666-666-69-69'
         )
 
         test_driver = Driver.objects.create(
@@ -376,7 +376,7 @@ class FlightTests(
         for test_instance_index in range(TEST_INSTANCES_AMOUNT):
             Route.objects.create(
                 id=test_instance_index,
-                name=f'Маршрут №1',
+                name='Маршрут №1',
                 regularity='Пн;Ср',
                 departure_time='10:00; 22:00',
                 price=300,
@@ -576,7 +576,7 @@ class DriverTests(
 
     def test_verbose_names(self):
         """Test verbose_name parameter for fields of Driver instances"""
-        
+
         super().test_verbose_names(Driver)
 
     def test_max_lengths(self):
