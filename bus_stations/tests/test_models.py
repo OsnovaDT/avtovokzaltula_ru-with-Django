@@ -193,11 +193,11 @@ class BusStationTests(
             'phone_number': 15,
         }
 
-        self.unique_fields = ['name', 'address', 'phone_number']
-
         self.fields_and_help_texts = {
             'office_hours': 'Часы работы через точку с запятой',
         }
+
+        self.unique_fields = ['name', 'address', 'phone_number']
 
         self.model_verbose_name = 'Автовокзал'
         self.model_verbose_name_plural = 'Автовокзалы'
@@ -227,7 +227,11 @@ class BusStationTests(
         """Test string display of BusStation instance"""
 
         for bus_station in BusStation.objects.all():
-            super().test_instance_string_display(bus_station, bus_station.name)
+            expected_string_display = bus_station.name
+
+            super().test_instance_string_display(
+                bus_station, expected_string_display
+            )
 
     def test_verbose_name_of_model(self):
         """Test verbose_name of BusStation model"""
@@ -246,10 +250,9 @@ class BusStationTests(
 
 
 class RouteTests(
-        TestCase, TestVerboseNamesMixin, TestMaxLengthsMixin,
-        TestHelpTextsMixin, TestVerboseNameOfModelMixin,
+        TestCase, TestVerboseNamesMixin, TestInstanceStringDisplayMixin,
+        TestHelpTextsMixin, TestVerboseNameOfModelMixin, TestMaxLengthsMixin,
         TestVerboseNamePluralOfModelMixin, TestOrderingOfModelMixin,
-        TestInstanceStringDisplayMixin
     ):
     """Test class for Route model"""
 
@@ -316,9 +319,11 @@ class RouteTests(
         """Test string display of Route instance"""
 
         for route in Route.objects.all():
+            expected_string_display = str(route.bus_station) + ' - ' \
+                + str(route.name)
+
             super().test_instance_string_display(
-                route,
-                str(route.bus_station) + ' - ' + str(route.name)
+                route, expected_string_display
             )
 
     def test_verbose_name_of_model(self):
@@ -418,9 +423,11 @@ class FlightTests(
         """Test string display of Flight instance"""
 
         for flight in Flight.objects.all():
+            expected_string_display = str(flight.route) + ' - ' \
+                + str(flight.departure_time)
+
             super().test_instance_string_display(
-                flight,
-                str(flight.route) + ' - ' + str(flight.departure_time)
+                flight, expected_string_display
             )
 
     def test_verbose_name_of_model(self):
@@ -489,7 +496,7 @@ class BusTests(
         super().test_verbose_names(Bus)
 
     def test_max_lengths(self):
-        """Test max_length parameter for fields of BUs instances"""
+        """Test max_length parameter for fields of Bus instances"""
 
         super().test_max_lengths(Bus)
 
@@ -497,9 +504,10 @@ class BusTests(
         """Test string display of Bus instance"""
 
         for bus in Bus.objects.all():
+            expected_string_display = f'{bus.mark} {bus.registration_number}'
+
             super().test_instance_string_display(
-                bus,
-                f'{bus.mark} {bus.registration_number}'
+                bus, expected_string_display
             )
 
     def test_verbose_name_of_model(self):
@@ -590,11 +598,12 @@ class DriverTests(
         """Test string display of Driver instance"""
 
         for driver in Driver.objects.all():
+            expected_string_display = str(driver.second_name) + " " \
+                + str(driver.name[0]) + "." + str(driver.middle_name[0]) \
+                + ". - " + str(driver.passport_number)
+
             super().test_instance_string_display(
-                driver,
-                str(driver.second_name) + " " + str(driver.name[0]) + "." + \
-                str(driver.middle_name[0]) + ". - " + \
-                str(driver.passport_number)
+                driver, expected_string_display
             )
 
     def test_verbose_name_of_model(self):
@@ -702,9 +711,10 @@ class TicketTests(
         """Test string display of Ticket instance"""
 
         for ticket in Ticket.objects.all():
+            expected_string_display = str(ticket.flight) + " - " \
+                + str(ticket.user)
             super().test_instance_string_display(
-                ticket,
-                str(ticket.flight) + " - " + str(ticket.user)
+                ticket, expected_string_display
             )
 
     def test_verbose_name_of_model(self):
@@ -726,4 +736,3 @@ class TicketTests(
         """Test get_latest_by of Ticket model"""
 
         super().test_get_latest_by_of_model(Ticket)
-# 715
