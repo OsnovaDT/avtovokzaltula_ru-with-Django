@@ -26,6 +26,13 @@
 </head>
 
 <body>
+    <style>
+        .table_string_with_href:hover{
+            background-color: #3DD042;
+            cursor: pointer;
+        }
+    </style>
+
     <nav class='navbar navbar-expand-lg navbar-dark bg-dark'>
         <a class='navbar-brand' href='{% url "bus_stations:index" %}'>
             <img src='{% static "bus_stations/img/logo.png" %}' width='50' height='50'>
@@ -64,6 +71,13 @@
         {% block content %}
         {% endblock content %}
     </section>
+
+    <script>
+        $('.table_string_with_href').on('click', function(){
+            let href = $(this).attr('href_for_click');
+            document.location = href;
+        })
+    </script>
 </body>
 
 </html>

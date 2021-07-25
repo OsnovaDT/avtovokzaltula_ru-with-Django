@@ -26,15 +26,16 @@
                     <th width='300'>Время отправления</th>
                 </tr>
                 {% for route in routes %}
-                <tr>
-                    <td>
-                        <a class='text-dark' href="{% url 'bus_stations:flights' route.pk %}">
-                            {{ route.name }}
-                        </a>
-                    </td>
+                <tr class="table_string_with_href" href_for_click="{% url 'bus_stations:flights' route.pk %}">
+                    {# Name #}
+                    <td>{{ route.name }}</td>
+
+                    {# Regularity #}
                     <td>
                         {{ route.regularity }}
                     </td>
+
+                    {# Departure time #}
                     <td>{{ route.departure_time }}</td>
                     {% endfor %}
             </table>
