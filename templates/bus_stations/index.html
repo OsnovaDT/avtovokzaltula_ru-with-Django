@@ -3,6 +3,13 @@
 {% block title %}Список автовокзалов{% endblock title %}
 
 {% block content %}
+<style>
+    .bus_station_tr:hover{
+        background-color: #3DD042;
+        cursor: pointer;
+    }
+</style>
+
 <div class="jumbotron">
     <div class="row">
         <div class="col-md-6 offset-3">
@@ -15,24 +22,33 @@
                     <th>Телефон</th>
                 </tr>
                 {% for bus_station in bus_stations %}
-                <tr>
-                    <td>
-                        <a class='text-dark' href="{% url 'bus_stations:routes' bus_station.pk %}">
-                            {{ bus_station }}
-                        </a>
-                    </td>
-                    <td class='text-center'>
-                        {{ bus_station.office_hours }}
-                    </td>
-                    <td>{{ bus_station.address }}</td>
-                    <td class='text-center'>
-                        {{ bus_station.phone_number }}
-                    </td>
-                </tr>
-                {% endfor %}
+                    <tr class="bus_station_tr" href_for_click="{% url 'bus_stations:routes' bus_station.pk %}">
+                        {# Name #}
+                        <td>{{ bus_station }}</td>
 
+                        {# Office hours #}
+                        <td class='text-center'>
+                            {{ bus_station.office_hours }}
+                        </td>
+
+                        {# Address #}
+                        <td>{{ bus_station.address }}</td>
+
+                        {# Phone number #}
+                        <td class='text-center'>
+                            {{ bus_station.phone_number }}
+                        </td>
+                    </tr>
+                {% endfor %}
             </table>
         </div>
     </div>
 </div>
+
+<script>
+    $('.bus_station_tr').on('click', function(){
+        let href = $(this).attr('href_for_click');
+        document.location = href;
+    })
+</script>
 {% endblock content %}
