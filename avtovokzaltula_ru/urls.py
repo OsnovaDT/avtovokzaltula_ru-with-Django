@@ -1,3 +1,5 @@
+"""Urls for folder avtovokzaltula_ru"""
+
 from django.contrib import admin
 from django.urls import path, include
 import debug_toolbar
@@ -23,5 +25,11 @@ urlpatterns = [
     path(
         'captcha/',
         include('captcha.urls')
-    )
+    ),
+
+    # API
+    path(
+        'api/',
+        include('api.urls')
+    ),
 ]
