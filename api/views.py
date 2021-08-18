@@ -2,10 +2,12 @@
 
 from django.contrib.auth.models import User
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from bus_stations.models import BusStation, Route
+from api.permissions import SuperUserPermission
 from api.serializers import (
-    UserSerializer, BusStationSerializer, RouteSerializer
+    UserSerializer, BusStationSerializer, RouteSerializer,
 )
 
 
@@ -14,6 +16,9 @@ class UserViewSet(ModelViewSet):
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = (
+        IsAuthenticatedOrReadOnly, SuperUserPermission
+    )
 
 
 class BusStationViewSet(ModelViewSet):
@@ -21,6 +26,9 @@ class BusStationViewSet(ModelViewSet):
 
     queryset = BusStation.objects.all()
     serializer_class = BusStationSerializer
+    permission_classes = (
+        IsAuthenticatedOrReadOnly, SuperUserPermission
+    )
 
 
 class RouteViewSet(ModelViewSet):
@@ -28,3 +36,6 @@ class RouteViewSet(ModelViewSet):
 
     queryset = Route.objects.all()
     serializer_class = RouteSerializer
+    permission_classes = (
+        IsAuthenticatedOrReadOnly, SuperUserPermission
+    )

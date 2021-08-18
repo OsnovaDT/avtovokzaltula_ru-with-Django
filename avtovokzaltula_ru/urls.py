@@ -32,4 +32,10 @@ urlpatterns = [
         'api/',
         include('api.urls')
     ),
+
+    # For login and logout in DRF
+    path(
+        'api-auth/',
+        include('rest_framework.urls')
+    )
 ]
