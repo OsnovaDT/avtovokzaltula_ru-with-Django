@@ -14,71 +14,58 @@ from api.serializers import (
 )
 
 
-class UserViewSet(ModelViewSet):
+class AdminPermissionMixin(ModelViewSet):
+    """Mixin for admin permission"""
+
+    permission_classes = (
+        IsAuthenticatedOrReadOnly, SuperUserPermission
+    )
+
+
+class UserViewSet(AdminPermissionMixin):
     """ViewSet for User model"""
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (
-        IsAuthenticatedOrReadOnly, SuperUserPermission
-    )
 
 
-class BusStationViewSet(ModelViewSet):
+class BusStationViewSet(AdminPermissionMixin):
     """ViewSet for BusStation model"""
 
     queryset = BusStation.objects.all()
     serializer_class = BusStationSerializer
-    permission_classes = (
-        IsAuthenticatedOrReadOnly, SuperUserPermission
-    )
 
 
-class RouteViewSet(ModelViewSet):
+class RouteViewSet(AdminPermissionMixin):
     """ViewSet for Route model"""
 
     queryset = Route.objects.all()
     serializer_class = RouteSerializer
-    permission_classes = (
-        IsAuthenticatedOrReadOnly, SuperUserPermission
-    )
 
 
-class FlightViewSet(ModelViewSet):
+class FlightViewSet(AdminPermissionMixin):
     """ViewSet for Flight model"""
 
     queryset = Flight.objects.all()
     serializer_class = FlightSerializer
-    permission_classes = (
-        IsAuthenticatedOrReadOnly, SuperUserPermission
-    )
 
 
-class BusViewSet(ModelViewSet):
+class BusViewSet(AdminPermissionMixin):
     """ViewSet for Bus model"""
 
     queryset = Bus.objects.all()
     serializer_class = BusSerializer
-    permission_classes = (
-        IsAuthenticatedOrReadOnly, SuperUserPermission
-    )
 
 
-class DriverViewSet(ModelViewSet):
+class DriverViewSet(AdminPermissionMixin):
     """ViewSet for Driver model"""
 
     queryset = Driver.objects.all()
     serializer_class = DriverSerializer
-    permission_classes = (
-        IsAuthenticatedOrReadOnly, SuperUserPermission
-    )
 
 
-class TicketViewSet(ModelViewSet):
+class TicketViewSet(AdminPermissionMixin):
     """ViewSet for Ticket model"""
 
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
-    permission_classes = (
-        IsAuthenticatedOrReadOnly, SuperUserPermission
-    )

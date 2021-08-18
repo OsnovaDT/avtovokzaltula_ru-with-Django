@@ -8,17 +8,23 @@ from api.views import (
     FlightViewSet, BusViewSet, DriverViewSet, TicketViewSet
 )
 
+# Slug will set after .../api/
+SLUG_AND_VIEWSET = {
+    'users': UserViewSet,
+    'bus_stations': BusStationViewSet,
+    'routes': RouteViewSet,
+    'flights': FlightViewSet,
+    'buses': BusViewSet,
+    'drivers': DriverViewSet,
+    'tickets': TicketViewSet,
+}
+
 
 api_router = routers.DefaultRouter()
 
-# First param is slug of api url
-api_router.register('users', UserViewSet)
-api_router.register('bus_stations', BusStationViewSet)
-api_router.register('routes', RouteViewSet)
-api_router.register('flights', FlightViewSet)
-api_router.register('buses', BusViewSet)
-api_router.register('drivers', DriverViewSet)
-api_router.register('tickets', TicketViewSet)
+for slug, view_set in SLUG_AND_VIEWSET.items():
+    api_router.register(slug, view_set)
+
 
 urlpatterns = [
     path(
