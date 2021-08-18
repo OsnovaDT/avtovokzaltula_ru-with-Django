@@ -79,6 +79,7 @@ class Route(models.Model):
 class Flight(models.Model):
     route = models.ForeignKey(
         'Route',
+        related_name='flights',
         on_delete=models.CASCADE,
         verbose_name='Маршрут'
     )
@@ -98,6 +99,7 @@ class Flight(models.Model):
 
     bus = models.ForeignKey(
         'Bus',
+        related_name='flights',
         on_delete=models.CASCADE,
         verbose_name='Автобус',
     )
