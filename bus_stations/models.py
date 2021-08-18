@@ -62,6 +62,7 @@ class Route(models.Model):
 
     bus_station = models.ForeignKey(
         'BusStation',
+        related_name='routes',
         on_delete=models.CASCADE,
         verbose_name='Автовокзал',
     )
